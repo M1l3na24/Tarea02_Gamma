@@ -13,8 +13,8 @@ class Profesor(cP.Persona):
     Clase que representa una persona del tipo Profesor.
     """
 
-    def __init__(self, nombre_completo: str, celular: str, fecha_cumpleanios: date, email: str, num_profesor: int,
-                 tel_oficina: int, sueldo:int, dept_ads: str, carrera: str, grupos: list):
+    def __init__(self, nombre_completo: str, celular: int, fecha_cumpleanios: str, email: str, num_profesor: int,
+                 tel_oficina: int, sueldo: int, dept_ads: str, carrera: str, grupos: list):
         """
         Constructor para un Profesor, ademas de los datos de una Persona, recibe el numero de profesor,
         telefono de oficina, sueldo, departamento de adscripcion, carrera donde imparte materias,
@@ -37,7 +37,6 @@ class Profesor(cP.Persona):
         self.__dept_ads = dept_ads
         self.__carrera = carrera
         self.__grupos = grupos
-
 
     # Metodos GET
     @property
@@ -66,6 +65,7 @@ class Profesor(cP.Persona):
         :rtype: int
         """
         return self.__sueldo
+
     @property
     def dept_ads(self) -> str:
         """
@@ -93,62 +93,80 @@ class Profesor(cP.Persona):
         """
         return self.__grupos
 
-
     # Metodos SET
-    @num_cuenta.setter
-    def num_cuenta(self, num_cuenta: int):
+
+    @num_profesor.setter
+    def num_profesor(self, num_profesor: int):
         """
-        Metodo para modificar el numero de cuenta del Alumno
-        :param num_cuenta: El numero de cuenta del Alumno
+        Metodo para modificar el numero de profesor del Profesor
+        :param num_profesor: El numero de profesor del Profesor
         """
-        self.__num_cuenta = num_cuenta
+        self.__num_profesor = num_profesor
+
+    @tel_oficina.setter
+    def tel_oficina(self, tel_oficina: int):
+        """
+        Metodo para modificar el telefono de oficina del Profesor
+        :param tel_oficina: El telefono de oficina del Profesor
+        """
+        self.__tel_oficina = tel_oficina
+
+    @sueldo.setter
+    def sueldo(self, sueldo: int):
+        """
+        Metodo para modificar el sueldo del Profesor
+        :param sueldo: El sueldo del Profesor
+        """
+        self.__sueldo = sueldo
+
+    @dept_ads.setter
+    def dept_ads(self, dept_ads: str):
+        """
+        Metodo para modificar el departamento de adscripcion del Profesor
+        :param dept_ads: El departamento de adscripcion del Profesor
+        """
+        self.__dept_ads = dept_ads
 
     @carrera.setter
     def carrera(self, carrera: str):
         """
-        Metodo para modificar la carrera del Alumno
-        :param carrera: La carrera del Alumno
+        Metodo para modificar la carrera donde imparte clases el Profesor
+        :param carrera: La carrera donde imparte clases el Profesor
         """
         self.__carrera = carrera
 
-    @materias.setter
-    def materias(self, materias: list):
+    @grupos.setter
+    def grupos(self, grupos: list):
         """
-        Metodo para modificar las materias del Alumno
-        :param materias: La lista de materias del Alumno
+        Metodo para modificar los grupos donde imparte clases el Profesor
+        :param grupos: Los grupos donde imparte clases el Profesor
         """
-        self.__materias = materias
-
-    @semestre.setter
-    def semestre(self, semestre: int):
-        """
-        Metodo para modificar el semestre del Alumno
-        :param semestre: El semestre del Alumno
-        """
-        self.__semestre = semestre
+        self.__grupos = grupos
 
     # Metodos calculadores
     def __str__(self) -> str:
         """
-        Metodo para obtener un Alumno en formato cadena
-        :return: El Alumno en formato de impresion
+        Metodo para obtener un Profesor en formato cadena
+        :return: El Profesor en formato de impresion
         :rtype: str
         """
-        return super().__str__().replace("Persona", "Alumno") + \
-            " | Num_cuenta: {} | Carrera: {} | Materias: {} | Semestre: {} |".format(self.__num_cuenta,
-                                                                                     self.__carrera, self.__materias,
-                                                                                     self.__semestre)
+        setlocale(LC_MONETARY, "en_US")
+        return super().__str__().replace("Persona", "Profesor") + \
+            " | Num_profesor: {} | Tel_oficina: {} |  Sueldo: {} | Dept. Ads: {} | Carrera: {} | Grupos: {} |".format(
+                self.__num_profesor, self.__tel_oficina, currency(self.__sueldo, grouping=True), self.__dept_ads,
+                self.__carrera, self.__grupos)
 
     # Este metodo se define cuando se desea que los objetos se guarden en un archivo
 
     def __iter__(self):
         """
         Metodo que devuelve una representacion iterable de un objeto
-        :return: La representacion en formato iterable del Alumno
+        :return: La representacion en formato iterable del Profesor
         :rtype: iterable
         """
         return iter([super().nombre_completo, super().celular, super().fecha_cumpleanios, super().email,
-                     self.__num_cuenta, self.__carrera, self.__materias, self.__semestre])
+                     self.__num_profesor, self.__tel_oficina, self.__sueldo, self.__dept_ads,
+                     self.__carrera, self.__grupos])
 
     # Estos metodos se tienen que agregar cuando se trabajan con objetos en los Conjuntos y lograr
     # que sus objetos sean hasheables
@@ -159,8 +177,8 @@ class Profesor(cP.Persona):
         :return: Una tupla con los atributos del objeto.
         :rtype: tuple
         """
-        return (super().nombre_completo, super().celular, super().fecha_cumpleanios, super().email, self.__num_cuenta,
-                self.__carrera, self.__materias, self.__semestre)
+        return (super().nombre_completo, super().celular, super().fecha_cumpleanios, super().email, self.__num_profesor,
+                self.__tel_oficina, self.__sueldo, self.__dept_ads, self.__carrera, self.__grupos)
 
     def __hash__(self) -> int:
         """
@@ -175,9 +193,9 @@ class Profesor(cP.Persona):
     def __eq__(self, otro) -> bool:
         """
         Metodo que permite definir el criterio de igualdad para dos objetos
-        :param otro: El Alumno con el que se va a realizar la comparacion
-        :return: True si los Alumnos son iguales, False en caso contrario
+        :param otro: El Profesor con el que se va a realizar la comparacion
+        :return: True si los Profesores son iguales, False en caso contrario
         :rtype: bool
         """
-        if isinstance(otro, Alumno):
+        if isinstance(otro, Profesor):
             return self.__llave() == otro.__llave()

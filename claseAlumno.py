@@ -11,7 +11,7 @@ class Alumno(cP.Persona):
     """
     Clase que representa una persona del tipo Alumno.
     """
-    def __init__(self, nombre_completo: str, celular: str, fecha_cumpleanios: date, email: str, num_cuenta: int,
+    def __init__(self, nombre_completo: str, celular: int, fecha_cumpleanios: str, email: str, num_cuenta: int,
                  carrera: str, materias: list, semestre: int):
         """
         Constructor para un Alumno, ademas de los datos de una Persona, recibe el numero de cuenta,
