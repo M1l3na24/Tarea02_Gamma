@@ -8,14 +8,14 @@ import numpy as np
 class Directorio:
     def __init__(self, almacenamiento):
         """
-        Constructor que permite crear el objeto Directorio que sera
-        un arreglo que contendra arreglos. Se construye como un directorio
-        nuevo: vacio por default
+        Constructor que permite crear el objeto Directorio (escolar) que sera
+        un arreglo que contendra arreglos(informacion de contacto).
+        Se construye como un directorio nuevo: vacio por default
         :param almacenamiento: indica el almacenamiento del directorio (0,n)
         """
         self.directorio = np.empty(almacenamiento, dtype=object)
 
-    def insertar_nuevo_contacto(self, *params):
+    def insertar_nuevo_contacto(self, tipo,  *params):
         """
         Constructor que permite crear diferentes objetos Persona
         :param params: Lista variable de parámetros (9 o 10)
@@ -25,3 +25,9 @@ class Directorio:
         self.profesores = np.array()
         self.coordinadores = np.array()
 
+    def mostrar_persona(self):
+        pass
+
+    #extra
+    def lectura_csvs(self, archivo_csv):
+        pass
