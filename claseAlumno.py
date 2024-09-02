@@ -4,7 +4,7 @@
 # Fecha: 31-08-2024
 
 import clasePersona as cP
-from datetime import date
+
 
 
 class Alumno(cP.Persona):

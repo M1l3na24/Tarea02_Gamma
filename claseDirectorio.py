@@ -1,13 +1,14 @@
 # Programa: claseDirectorio.py
 # Objetivo: Programa que define la clase Directorio
 # Autores: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
-# Version: 30-08-2024
+# Version: 02-09-2024
 
 import numpy as np
-import clasePersona as cP
+# import clasePersona as cP
 import claseAlumno as cA
 import claseProfesor as cPr
 import claseCoordinador as cC
+
 
 class Directorio:
     def __init__(self, almacenamiento):
@@ -61,7 +62,8 @@ class Directorio:
                 break
             except ValueError:
                 print('El semestre del alumno, tiene que ser un entero')
-        self.directorio[self.num_personas] = cA.Alumno(nombre, celular, cumpleanios, correo, num_cuenta, carrera, materias, semestre)
+        self.directorio[self.num_personas] = cA.Alumno(nombre, celular, cumpleanios, correo, num_cuenta, carrera,
+                                                       materias, semestre)
         self.num_personas += 1
         print('Alumno agregado\n')
 
@@ -172,7 +174,7 @@ class Directorio:
         """
         for persona in self.directorio:
             if persona is not None and persona.nombre_completo == nombre_completo:
-                return np.where(self.directorio == persona)[0][0]
+                return int(np.where(self.directorio == persona)[0][0])
         return -1
 
     def esta_vacio(self) -> bool:
@@ -182,6 +184,7 @@ class Directorio:
                  False - Si hay algun elemento en el arreglo de personas
         """
         return not self.directorio.any()
+
     def mostrar_persona(self, nombre):
         """
         Metodo __str__ que define como mostrar una persona dentro del directorio.
@@ -194,26 +197,30 @@ class Directorio:
             posicion = self.buscar_indice(nombre)
             persona = self.directorio[posicion]
             if isinstance(persona, cA.Alumno):
-                return ("\nNombre:\n" + persona[0] + "\nCelular:\n" + persona[1] + "\nCumpleanios:\n" + persona[2] +
-                        "\nCorreo:\n" + persona[3] + "\nNum. Cuenta:\n" + persona[4] + "\nCarrera:\n" + persona[5] +
-                        "\nMaterias:\n" + persona[6] + "\nSemestre:\n" + persona[7])
+                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Cuenta:\n" + str(persona.num_cuenta) + "\nCarrera:\n" + persona.carrera +
+                        "\nMaterias:\n" + str(persona.materias) + "\nSemestre:\n" + str(persona.semestre))
             elif isinstance(persona, cPr.Profesor):
                 cPr.setlocale(cPr.LC_MONETARY, "en_US")
-                return ("\nNombre:\n" + persona[0] + "\nCelular:\n" + persona[1] + "\nCumpleanios:\n" + persona[2] +
-                        "\nCorreo:\n" + persona[3] + "\nNum. Profesor:\n" + persona[4] + "\nTel. Oficina:\n" + persona[5] +
-                        "\nSueldo:\n" + cPr.currency(persona[6], grouping=True) + "\nDept. Ads.:\n" + persona[7] +
-                        "\nCarrera donde imparte materias:\n" + persona[8] + "\nGrupos:\n" + persona[9])
-            else:
+                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Profesor:\n" + str(persona.num_profesor) + "\nTel. Oficina:\n" +
+                        str(persona.tel_oficina) + "\nSueldo:\n" + cPr.currency(persona.sueldo, grouping=True) +
+                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera donde imparte materias:\n" +
+                        persona.carrera + "\nGrupos:\n" + str(persona.grupos))
+
+            elif isinstance(persona, cC.Coordinador):
                 cC.setlocale(cC.LC_MONETARY, "en_US")
-                return ("\nNombre:\n" + persona[0] + "\nCelular:\n" + persona[1] + "\nCumpleanios:\n" + persona[2] +
-                        "\nCorreo:\n" + persona[3] + "\nNum. Empleado:\n" + persona[4] + "\nTel. Oficina:\n" + persona[5] +
-                        "\nSueldo:\n" + cC.currency(persona[6], grouping=True) + "\nDept. Ads.:\n" + persona[7] +
-                        "\nCarrera que coordina:\n" + persona[8])
+                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Empleado:\n" + str(persona.num_empleado) + "\nTel. Oficina:\n" +
+                        str(persona.tel_oficina) + "\nSueldo:\n" + cC.currency(persona.sueldo, grouping=True) +
+                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera que coordina:\n" + persona.carrera_coordina)
         return "No hay contactos."
 
-
-    #extra: lectura/escritura de archivos CSV
-    def lectura_csvs(self, archivo_csv):
+    # extra: lectura/escritura de archivos CSV
+    def lectura_csvs(self):
         """
         Metodo que carga/abre la informacion de un archivo en nuestro arreglo de directorio,
         dependiendo del tipo de persona, se utilizara el constructor correspodiente.
@@ -226,27 +233,22 @@ class Directorio:
                 lineas = f.readlines()
                 for linea in lineas:
                     linea = linea.split(",")
-                    if (linea[0] == 'A'):
-                        self.directorio[self.num_personas] = cA.Alumno(linea[1], int(linea[2]),
-                                                                        linea[3], linea[4],
-                                                                        int(linea[5]), linea[6],
-                                                                        list(linea[7]), linea[8])
+                    if linea[0] == 'A':
+                        self.directorio[self.num_personas] = cA.Alumno(linea[1], int(linea[2]), linea[3], linea[4],
+                                                                       int(linea[5]), linea[6], list(linea[7]),
+                                                                       int(linea[8]))
                         self.numeros_cuenta.add(int(linea[5]))
                         self.num_personas += 1
-                    elif (linea[0] == 'P'):
-                        self.directorio[self.num_personas] = cPr.Profesor(linea[1], int(linea[2]),
-                                                                          linea[3], linea[4],
-                                                                        int(linea[5]), int(linea[6]),
-                                                                        int(linea[7]), linea[8],
-                                                                          linea[9], list(linea[10]))
+                    elif linea[0] == 'P':
+                        self.directorio[self.num_personas] = cPr.Profesor(linea[1], int(linea[2]), linea[3], linea[4],
+                                                                          int(linea[5]), int(linea[6]), int(linea[7]),
+                                                                          linea[8], linea[9], list(linea[10]))
                         self.numeros_cuenta.add(int(linea[5]))
                         self.num_personas += 1
-                    elif (linea[0] == 'C'):
-                        self.directorio[self.num_personas] = cC.Coordinador(linea[1], int(linea[2]),
-                                                                            linea[3], linea[4],
-                                                                        int(linea[5]), int(linea[6]),
-                                                                        int(linea[7]), linea[8],
-                                                                          linea[9])
+                    elif linea[0] == 'C':
+                        self.directorio[self.num_personas] = cC.Coordinador(linea[1], int(linea[2]), linea[3], linea[4],
+                                                                            int(linea[5]), int(linea[6]), int(linea[7]),
+                                                                            linea[8], linea[9])
                         self.numeros_cuenta.add(int(linea[5]))
                         self.num_personas += 1
                 print("Archivo cargado correctamente")

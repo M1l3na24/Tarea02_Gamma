@@ -120,7 +120,7 @@ class Persona:
         return ("Persona:: {} {} | Celular: {} | "
                 "Fecha cumpleanios: {} | Email: {}").format(self.__nombre_completo,
                                                             self.__celular,
-                                                            self.__fecha_cumpleanios,
+                                                            self.__fecha_cumpleanios.strftime("%d/%m/%Y"),
                                                             self.__celular,
                                                             self.__email)
 

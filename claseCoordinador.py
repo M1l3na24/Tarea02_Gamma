@@ -4,7 +4,6 @@
 # Fecha: 31-08-2024
 
 import clasePersona as cP
-from datetime import date
 from locale import currency, setlocale, LC_MONETARY
 
 
