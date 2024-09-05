@@ -80,3 +80,29 @@ class Directorio:
                 print(coordinador)
         else:
             print("\nNo se encontraron coordinadores con el sueldo especificado.")
+            
+    def eliminar_cel(self, celular):
+        """
+        Elimina los datos de un contacto a partir del número de celular.
+        """
+        self.ordenar_directorio()
+        for persona in self.directorio:
+            if persona and persona.celular == celular:
+                self.directorio.remove(persona)
+                self.num_personas -= 1
+                print(f"El contacto con el número de celular: '{celular}' ha sido eliminado.")
+                return
+        print(f"No se encontró contacto con el número de celular: {celular}")
+
+    def eliminar_cel(self, correo):
+        """
+        Elimina los datos de un contacto a partir del correo electronico.
+        """
+        self.ordenar_directorio()
+        for persona in self.directorio:
+            if persona and persona.email == correo:
+                self.directorio.remove(persona)
+                self.num_personas -= 1
+                print(f"El contacto con el correo electrónico: '{correo}' ha sido eliminado.")
+                return
+        print(f"No se encontró contacto con el correo electrónico: {correo}")
