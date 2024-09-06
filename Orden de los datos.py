@@ -13,7 +13,7 @@ class Directorio:
         self.numeros_empleado = set()
         self.num_personas = 0
 
-    def __str__(self) -> (str,str,str):
+    def __str__(self) -> str:
         cadena = ''
         self.ordenar_directorio()
         alumnos = []
