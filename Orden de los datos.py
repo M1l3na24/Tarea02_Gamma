@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 import clasePersona as cP
 import claseAlumno as cA
@@ -11,6 +12,42 @@ class Directorio:
         self.numeros_profesor = set()
         self.numeros_empleado = set()
         self.num_personas = 0
+
+    def __str__(self) -> (str,str,str):
+        cadena = ''
+        self.ordenar_directorio()
+        alumnos = []
+        profesores = []
+        coordinadores = []
+        for i in range(self.num_personas):
+            if isinstance(self.directorio[i], cA.Alumno):
+                alumnos.append(self.directorio[i])
+            elif isinstance(self.directorio[i], cPr.Profesor):
+                profesores.append(self.directorio[i])
+            elif isinstance(self.directorio[i], cC.Coordinador):
+                coordinadores.append(self.directorio[i])
+        if alumnos:
+            cadena + '\nAlumnos: '
+            for alumno in alumnos:
+                cadena + f'\n{str(alumno)}'
+        else:
+            cadena + '\n\nNo hay alumnos registrados'
+
+        if profesores:
+            cadena + '\n\nProfesores: '
+            for profesor in profesores:
+                cadena + f'\n{str(profesor)}'
+        else:
+            cadena + '\n\nNo hay profesores registrados'
+
+        if coordinadores:
+            cadena + '\n\nCoordinadores: '
+            for coordinador in coordinadores:
+                cadena + f'\n{str(coordinador)}'
+        else:
+            cadena + '\n\nNo hay coordinadores registrados'
+        return cadena
+
 
     def ordenar_directorio(self):
         """Ordena el directorio por nombre"""
@@ -80,7 +117,94 @@ class Directorio:
                 print(coordinador)
         else:
             print("\nNo se encontraron coordinadores con el sueldo especificado.")
-            
+
+    def mostrar_contactos_con_email(self):
+        '''
+        Muestra los contactos por categoria y ordenados
+        Obs: por como fue definido la clase Persona, todo objeto persona
+        tiene un email valido.
+        '''
+        copia = copy.deepcopy(self)
+        copia.eliminar_email(None)
+        copia.eliminar_email('')
+        print(copia)
+        return
+
+    def mostrar_contactos_de_carrera(self, carrera_particular):
+        '''
+        Muestra los contactos de una carrera particular
+        :param carrera: Nombre de la carrera :str
+        '''
+        alumnos_en_carrera = []
+        profesores_de_carrera = []
+        coordinadores_de_carrera = []
+
+        for i in range(self.num_personas):
+            if isinstance(self.directorio[i], cA.Alumno):
+                if self.directorio[i].carrera() == carrera_particular:
+                    alumnos_en_carrera.append(self.directorio[i])
+            elif isinstance(self.directorio[i],cPr.Profesor):
+                if self.directorio[i].carrera() == carrera_particular:
+                    profesores_de_carrera.append(self.directorio[i])
+            elif isinstance(self.directorio[i], cC.Coordinador):
+                if self.directorio[i].carrera_coordina() == carrera_particular:
+                    coordinadores_de_carrera.append(self.directorio[i])
+
+        if alumnos_en_carrera:
+            print(f'Alumnos en {carrera_particular}:')
+            for alumno in alumnos_en_carrera:
+                    print(alumno)
+        else:
+            print(f'No hay alumnos en {carrera_particular}')
+
+        if profesores_de_carrera:
+            print(f'Profesores de {carrera_particular}:')
+            for profesor in profesores_de_carrera:
+                print(profesor)
+        else:
+            print(f'No hay profesores de {carrera_particular}')
+
+        if coordinadores_de_carrera:
+            print(f'Coordinadores de {carrera_particular}:')
+            for coordinador in coordinadores_de_carrera:
+                    print(coordinador)
+        else:
+            print(f'No hay coordinadores de {carrera_particular}')
+
+    def mostrar_alumnos_o_profesores(self, eleccion):
+        '''
+        Muestra solo los alumnos o solo los maestros en orden
+        Esto segun la eleccion del usuario
+        :param eleccion: 0 si alumnos, 1 si maestros
+        '''
+
+        self.ordenar_directorio()
+        if eleccion == 0:
+            alumnos = []
+            for i in range(self.num_personas):
+                if isinstance(self.directorio[i], cA.Alumno):
+                    alumnos.append(self.directorio[i])
+            if alumnos:
+                print('\nAlumnos registrados:')
+                for alumno in alumnos:
+                    print(alumno)
+            else:
+                print('\nNo hay alumnos registrados')
+
+        elif eleccion == 1:
+            profesores = []
+            for persona in self.directorio:
+                if isinstance(persona, cPr.Profesor):
+                    profesores.append(persona)
+            if profesores:
+                print('\nProfesores registrados:')
+                for profesor in profesores:
+                    print(profesor)
+            else:
+                print('\nNp hay profesores registrados')
+        else:
+            print('No es una entrada valida')
+
     def eliminar_cel(self, celular):
         """
         Elimina los datos de un contacto a partir del número de celular.
@@ -94,7 +218,7 @@ class Directorio:
                 return
         print(f"No se encontró contacto con el número de celular: {celular}")
 
-    def eliminar_cel(self, correo):
+    def eliminar_email(self, correo):
         """
         Elimina los datos de un contacto a partir del correo electronico.
         """
@@ -105,4 +229,4 @@ class Directorio:
                 self.num_personas -= 1
                 print(f"El contacto con el correo electrónico: '{correo}' ha sido eliminado.")
                 return
-        print(f"No se encontró contacto con el correo electrónico: {correo}")
+            print(f"No se encontró contacto con el correo electrónico: {correo}")
