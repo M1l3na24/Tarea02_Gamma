@@ -177,6 +177,34 @@ class Directorio:
                 return int(np.where(self.directorio == persona)[0][0])
         return -1
 
+    def buscar_indice_cel(self, celular) -> int:
+        """
+        Método auxiliar que busca el índice del arreglo de directorio, dado el número de celular de una persona.
+
+        :param celular: El número de celular a buscar en el directorio.
+        :return: El índice (int) del arreglo del directorio si se encuentra un valor >= 0.
+                 Si no se encuentra en el arreglo, retorna un valor < 0.
+        :rtype: int
+        """
+        for persona in self.directorio:
+            if persona is not None and persona.celular == celular:
+                return int(np.where(self.directorio == persona)[0][0])
+        return -1
+
+    def buscar_indice_cum(self, cumpleaños) -> int:
+        """
+        Método auxiliar que busca el índice del arreglo de directorio, dado la fecha de cumpleaños de una persona.
+
+        :param cumpleaños: La fecha de cumpleaños a buscar en el directorio.
+        :return: El índice (int) del arreglo del directorio si se encuentra un valor >= 0.
+                 Si no se encuentra en el arreglo, retorna un valor < 0.
+        :rtype: int
+        """
+        for persona in self.directorio:
+            if persona is not None and persona.fecha_cumpleanios == cumpleaños:
+                return int(np.where(self.directorio == persona)[0][0])
+        return -1
+
     def esta_vacio(self) -> bool:
         """
         Metodo que verifica si esta vacio el arreglo (directorio)
@@ -301,83 +329,69 @@ class Directorio:
             print(f"No se encontró contacto con el correo electrónico: {correo}")
 
     def buscar_contacto_celular(self, celular):
-        '''
-        Busca y muestra los contatos con un número de celular
-        :param celular: Nombre de la carrera :str
-        '''
-        alumnos_cel = []
-        profesores_cel= []
-        coordinadores_cel = []
+        """
+        Metodo __str__ que define como mostrar una persona dentro del directorio.
+        La representa a traves de los elementos en el array.
+        :param celular: número de celular del contacro
+        :return: cadena: Str - La representacion de la persona en el directorio
+        :rtype: Str
+        """
+        if not self.esta_vacio():
+            posicion = self.buscar_indice_cel(celular)
+            persona = self.directorio[posicion]
+            if isinstance(persona, cA.Alumno):
+                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Cuenta:\n" + str(persona.num_cuenta) + "\nCarrera:\n" + persona.carrera +
+                        "\nMaterias:\n" + str(persona.materias) + "\nSemestre:\n" + str(persona.semestre))
+            elif isinstance(persona, cPr.Profesor):
+                cPr.setlocale(cPr.LC_MONETARY, "en_US")
+                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Profesor:\n" + str(persona.num_profesor) + "\nTel. Oficina:\n" +
+                        str(persona.tel_oficina) + "\nSueldo:\n" + cPr.currency(persona.sueldo, grouping=True) +
+                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera donde imparte materias:\n" +
+                        persona.carrera + "\nGrupos:\n" + str(persona.grupos))
 
-        for i in range(self.num_personas):
-            if isinstance(self.directorio[i], cA.Alumno):
-                if self.directorio[i].celular() == celular:
-                    alumnos_cel.append(self.directorio[i])
-            elif isinstance(self.directorio[i],cPr.Profesor):
-                if self.directorio[i].celular() == celular:
-                    profesores_cel.append(self.directorio[i])
-            elif isinstance(self.directorio[i], cC.Coordinador):
-                if self.directorio[i].celular() == celular:
-                    coordinadores_cel.append(self.directorio[i])
-
-        if alumnos_cel:
-            print(f'Alumnos con el número de celular: {celular}:')
-            for alumno in alumnos_cel:
-                    print(alumno)
-        else:
-            print(f'No hay alumnos con el número de celular: {celular}')
-
-        if profesores_cel:
-            print(f'Profesores con el número de celular:{celular}:')
-            for profesor in profesores_cel:
-                print(profesor)
-        else:
-            print(f'No hay profesores con el número de celular: {celular}')
-
-        if coordinadores_cel:
-            print(f'Coordinadores de {celular}:')
-            for coordinador in coordinadores_cel:
-                    print(coordinador)
-        else:
-            print(f'No hay coordinadores con el número de celular: {celular}')
+            elif isinstance(persona, cC.Coordinador):
+                cC.setlocale(cC.LC_MONETARY, "en_US")
+                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Empleado:\n" + str(persona.num_empleado) + "\nTel. Oficina:\n" +
+                        str(persona.tel_oficina) + "\nSueldo:\n" + cC.currency(persona.sueldo, grouping=True) +
+                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera que coordina:\n" + persona.carrera_coordina)
+        return "No hay contactos."
 
     def buscar_contacto_cum(self, cumpleaños):
-        '''
-        Busca y muestra los contatos respecto a una fecha de nacimiento
-        :param cumpleaños: Nombre de la carrera :str
-        '''
-        alumnos_cum = []
-        profesores_cum= []
-        coordinadores_cum = []
+        """
+        Metodo __str__ que define como mostrar una persona dentro del directorio.
+        La representa a traves de los elementos en el array.
+        :param cumpleaños: cumpleaños del contacto
+        :return: cadena: Str - La representacion de la persona en el directorio
+        :rtype: Str
+        """
+        if not self.esta_vacio():
+            posicion = self.buscar_indice_cum(cumpleaños)
+            persona = self.directorio[posicion]
+            if isinstance(persona, cA.Alumno):
+                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Cuenta:\n" + str(persona.num_cuenta) + "\nCarrera:\n" + persona.carrera +
+                        "\nMaterias:\n" + str(persona.materias) + "\nSemestre:\n" + str(persona.semestre))
+            elif isinstance(persona, cPr.Profesor):
+                cPr.setlocale(cPr.LC_MONETARY, "en_US")
+                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Profesor:\n" + str(persona.num_profesor) + "\nTel. Oficina:\n" +
+                        str(persona.tel_oficina) + "\nSueldo:\n" + cPr.currency(persona.sueldo, grouping=True) +
+                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera donde imparte materias:\n" +
+                        persona.carrera + "\nGrupos:\n" + str(persona.grupos))
 
-        for i in range(self.num_personas):
-            if isinstance(self.directorio[i], cA.Alumno):
-                if self.directorio[i].fecha_cumpleanios() == cumpleaños:
-                    alumnos_cum.append(self.directorio[i])
-            elif isinstance(self.directorio[i],cPr.Profesor):
-                if self.directorio[i].fecha_cumpleanios() == cumpleaños:
-                    profesores_cum.append(self.directorio[i])
-            elif isinstance(self.directorio[i], cC.Coordinador):
-                if self.directorio[i].fecha_cumpleanios() == cumpleaños:
-                    coordinadores_cum.append(self.directorio[i])
-
-        if alumnos_cum:
-            print(f'Alumnos con fecha de nacimiento: {cumpleaños}:')
-            for alumno in alumnos_cum:
-                    print(alumno)
-        else:
-            print(f'No hay alumnos con fecha de nacimiento: {cumpleaños}')
-
-        if profesores_cum:
-            print(f'Profesores con fecha de nacimiento:{cumpleaños}:')
-            for profesor in profesores_cum:
-                print(profesor)
-        else:
-            print(f'No hay profesores con fecha de nacimiento: {cumpleaños}')
-
-        if coordinadores_cum:
-            print(f'Coordinadores de {cumpleaños}:')
-            for coordinador in coordinadores_cum:
-                    print(coordinador)
-        else:
-            print(f'No hay coordinadores con fecha de nacimiento: {cumpleaños}')
+            elif isinstance(persona, cC.Coordinador):
+                cC.setlocale(cC.LC_MONETARY, "en_US")
+                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Empleado:\n" + str(persona.num_empleado) + "\nTel. Oficina:\n" +
+                        str(persona.tel_oficina) + "\nSueldo:\n" + cC.currency(persona.sueldo, grouping=True) +
+                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera que coordina:\n" + persona.carrera_coordina)
+        return "No hay contactos."
