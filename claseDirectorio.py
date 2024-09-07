@@ -273,3 +273,111 @@ class Directorio:
                 per = per[:-1] + '\n'
                 f.write(per)
         f.close()
+
+    def eliminar_cel(self, celular):
+        """
+        Elimina los datos de un contacto a partir del número de celular.
+        """
+        self.ordenar_directorio()
+        for persona in self.directorio:
+            if persona and persona.celular == celular:
+                self.directorio.remove(persona)
+                self.num_personas -= 1
+                print(f"El contacto con el número de celular: '{celular}' ha sido eliminado.")
+                return
+        print(f"No se encontró contacto con el número de celular: {celular}")
+
+    def eliminar_email(self, correo):
+        """
+        Elimina los datos de un contacto a partir del correo electronico.
+        """
+        self.ordenar_directorio()
+        for persona in self.directorio:
+            if persona and persona.email == correo:
+                self.directorio.remove(persona)
+                self.num_personas -= 1
+                print(f"El contacto con el correo electrónico: '{correo}' ha sido eliminado.")
+                return
+            print(f"No se encontró contacto con el correo electrónico: {correo}")
+
+    def buscar_contacto_celular(self, celular):
+        '''
+        Busca y muestra los contatos con un número de celular
+        :param celular: Nombre de la carrera :str
+        '''
+        alumnos_cel = []
+        profesores_cel= []
+        coordinadores_cel = []
+
+        for i in range(self.num_personas):
+            if isinstance(self.directorio[i], cA.Alumno):
+                if self.directorio[i].celular() == celular:
+                    alumnos_cel.append(self.directorio[i])
+            elif isinstance(self.directorio[i],cPr.Profesor):
+                if self.directorio[i].celular() == celular:
+                    profesores_cel.append(self.directorio[i])
+            elif isinstance(self.directorio[i], cC.Coordinador):
+                if self.directorio[i].celular() == celular:
+                    coordinadores_cel.append(self.directorio[i])
+
+        if alumnos_cel:
+            print(f'Alumnos con el número de celular: {celular}:')
+            for alumno in alumnos_cel:
+                    print(alumno)
+        else:
+            print(f'No hay alumnos con el número de celular: {celular}')
+
+        if profesores_cel:
+            print(f'Profesores con el número de celular:{celular}:')
+            for profesor in profesores_cel:
+                print(profesor)
+        else:
+            print(f'No hay profesores con el número de celular: {celular}')
+
+        if coordinadores_cel:
+            print(f'Coordinadores de {celular}:')
+            for coordinador in coordinadores_cel:
+                    print(coordinador)
+        else:
+            print(f'No hay coordinadores con el número de celular: {celular}')
+
+    def buscar_contacto_cum(self, cumpleaños):
+        '''
+        Busca y muestra los contatos respecto a una fecha de nacimiento
+        :param cumpleaños: Nombre de la carrera :str
+        '''
+        alumnos_cum = []
+        profesores_cum= []
+        coordinadores_cum = []
+
+        for i in range(self.num_personas):
+            if isinstance(self.directorio[i], cA.Alumno):
+                if self.directorio[i].fecha_cumpleanios() == cumpleaños:
+                    alumnos_cum.append(self.directorio[i])
+            elif isinstance(self.directorio[i],cPr.Profesor):
+                if self.directorio[i].fecha_cumpleanios() == cumpleaños:
+                    profesores_cum.append(self.directorio[i])
+            elif isinstance(self.directorio[i], cC.Coordinador):
+                if self.directorio[i].fecha_cumpleanios() == cumpleaños:
+                    coordinadores_cum.append(self.directorio[i])
+
+        if alumnos_cum:
+            print(f'Alumnos con fecha de nacimiento: {cumpleaños}:')
+            for alumno in alumnos_cum:
+                    print(alumno)
+        else:
+            print(f'No hay alumnos con fecha de nacimiento: {cumpleaños}')
+
+        if profesores_cum:
+            print(f'Profesores con fecha de nacimiento:{cumpleaños}:')
+            for profesor in profesores_cum:
+                print(profesor)
+        else:
+            print(f'No hay profesores con fecha de nacimiento: {cumpleaños}')
+
+        if coordinadores_cum:
+            print(f'Coordinadores de {cumpleaños}:')
+            for coordinador in coordinadores_cum:
+                    print(coordinador)
+        else:
+            print(f'No hay coordinadores con fecha de nacimiento: {cumpleaños}')
