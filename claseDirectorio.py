@@ -378,6 +378,7 @@ class Directorio:
         else:
             cadena + '\n\nNo hay alumnos registrados'
 
+
         if profesores:
             cadena + '\n\nProfesores: '
             for profesor in profesores:
