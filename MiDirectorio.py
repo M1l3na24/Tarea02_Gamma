@@ -121,13 +121,13 @@ if __name__ == "__main__":
 
     while True:
         try:
-            almacenamiento = int(input('Escriba el tamaño del directorio: '))
+            almacenamiento = int(input('Escriba el tamaño del directorio: ')) ### realmente este no es necesario porque el idrectorio crece conforme le agregues cosas
             break
         except ValueError:
             print('El tamanño de directorio debe ser entero')
 
-    directorio = dir.Directorio(almacenamiento)
-    print(f'Ya cree el directorio con almacenamiento igual a {almacenamiento}')
+    directorio = dir.Directorio()
+    print(f'Ya cree el directorio vacio')###modifique esto
 
     while True:
         opcion = input('Que deseas hacer:\n'
