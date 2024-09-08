@@ -6,7 +6,6 @@
 import clasePersona as cP
 
 
-
 class Alumno(cP.Persona):
     """
     Clase que representa una persona del tipo Alumno.
