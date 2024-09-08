@@ -127,6 +127,7 @@ if __name__ == "__main__":
             print('El tamanño de directorio debe ser entero')
 
     directorio = dir.Directorio(almacenamiento)
+    print(f'Ya cree el directorio con almacenamiento igual a {almacenamiento}')
 
     while True:
         opcion = input('Que deseas hacer:\n'
@@ -140,7 +141,9 @@ if __name__ == "__main__":
             break
     match opcion:
         case '1':
-            dir.lectura_csvs()
+            print('Leer un archivo csv creara un directorio nuevo con la capacidad necesaria que dependera del csv.')
+            directorio.lectura_csvs()
+            print(directorio)
             opcion = ''
             while opcion != 'S':
                 opcion = menuPrincipal()
