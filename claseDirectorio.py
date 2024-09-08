@@ -23,7 +23,7 @@ class Directorio:
         self.numeros_cuenta = set()
         self.numeros_profesor = set()
         self.numeros_empleado = set()
-        # es un indice que me permite saber cual es el tamaño de mi directorio actual
+        # num_personas es un indice que me permite saber cual es el tamaño de mi directorio actual
         self.num_personas = 0
 
     # Insertar datos de un nuevo contacto (alumno, profesor o coordinador).
@@ -45,8 +45,8 @@ class Directorio:
             except ValueError:
                 print('El numero de cuenta del alumno, tiene que ser un entero')
         nombre = input('Escribe el nombre completo del alumno: ')
-        # la fecha de cumpleanios debe ser dia/mes
-        cumpleanios = input('Escribe la fecha de cumpleanios del alumno: ')
+        # la fecha de cumpleanios debe ser dia/mes/anio
+        cumpleanios = input('Escribe la fecha de cumpleanios del alumno (dia/mes/anio): ')
         correo = input('Escribe el correo del alumno: ')
         carrera = input('Escribe la carrera del alumno: ')
         materias = list(input('Escribe las materias del alumno separadas por comas: '))
@@ -86,8 +86,8 @@ class Directorio:
             except ValueError:
                 print('El numero de profesor, tiene que ser un entero')
         nombre = input('Escribe el nombre completo del profesor: ')
-        # la fecha de cumpleanios debe ser dia/mes
-        cumpleanios = input('Escribe la fecha de cumpleanios del profesor: ')
+        # la fecha de cumpleanios debe ser dia/mes/anio
+        cumpleanios = input('Escribe la fecha de cumpleanios del profesor (dia/mes/anio): ')
         correo = input('Escribe el correo del profesor: ')
         dept = input('Escribe el departamento de adscripcion del profesor: ')
         carrera = input('Escribe la carrera en la que imparte materias el profesor: ')
@@ -135,8 +135,8 @@ class Directorio:
             except ValueError:
                 print('El numero de empleado, tiene que ser un entero')
         nombre = input('Escribe el nombre completo del Coordinador: ')
-        # la fecha de cumpleanios debe ser dia/mes
-        cumpleanios = input('Escribe la fecha de cumpleanios del Coordinador: ')
+        # la fecha de cumpleanios debe ser dia/mes/anio
+        cumpleanios = input('Escribe la fecha de cumpleanios del Coordinador (dia/mes/anio): ')
         correo = input('Escribe el correo del Coordinador: ')
         dept = input('Escribe el departamento de adscripcion del Coordinador: ')
         carrera_coor = input('Escribe la carrera que coordina: ')
@@ -163,8 +163,6 @@ class Directorio:
         self.num_personas += 1
         print('Coordinador agregado\n')
 
-    # Mostrar la información completa de un contacto, con solo proporcionar su nombre (independientemente que sea un
-    # alumno, profesor o coordinador).
     def buscar_indice(self, nombre_completo) -> int:
         """
         Metodo auxiliar que busca el indice del arreglo de directorio, dado el nombre completo de una persona
@@ -220,7 +218,7 @@ class Directorio:
                         "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera que coordina:\n" + persona.carrera_coordina)
         return "No hay contactos."
 
-    # extra: lectura/escritura de archivos CSV
+    # Extra: lectura/escritura de archivos CSV
     def lectura_csvs(self):
         """
         Metodo que carga/abre la informacion de un archivo en nuestro arreglo de directorio,
@@ -741,7 +739,7 @@ class Directorio:
             encontro = False
             for i in range(self.num_personas):
                 if self.directorio[i] == contacto:  # Lo encontro
-                    if i == self.num_personas - 1:  # El elemento está al final
+                    if i == self.num_personas - 1:  # El elemento esta al final
                         self.num_personas -= 1  # Dejamos innaccesible el elemento
                     else:  # El elemento no esta al final
                         self.num_personas -= 1
