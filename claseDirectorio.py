@@ -17,14 +17,14 @@ class Directorio:
         Constructor que permite crear el objeto Directorio (escolar) que sera
         un arreglo que contendra arreglos(informacion de contacto).
         Se construye como un directorio nuevo: vacio por default
-        :param almacenamiento: indica el almacenamiento del directorio (0,n)
         """
         # Crear un directorio vacio
         self.directorio = np.empty(1, dtype=object)
         self.numeros_cuenta = set()
         self.numeros_profesor = set()
         self.numeros_empleado = set()
-        self.num_personas = 0 # es un indice que me permite saber cual es el tamaño de mi directorio actual
+        # es un indice que me permite saber cual es el tamaño de mi directorio actual
+        self.num_personas = 0
 
     # Insertar datos de un nuevo contacto (alumno, profesor o coordinador).
     def insertar_nuevo_alumno(self):
@@ -275,19 +275,17 @@ class Directorio:
                 f.write(per)
         f.close()
 
-
-#Mayela
     # En esta clase el metodo de ordenamiento que utilizamos fue Quick Sort
+
     def __particion(self, inicio, fin, comparador) -> int:
         """
-        Esta función organiza los elementos del arreglo de manera que todos los elementos
-        menores o iguales al pivote estén a la izquierda y todos los elementos mayores estén
-        a la derecha. El pivote se coloca en su posición correcta.
-        :param arreglo: int[] Arreglo de enteros
+        Esta funcion organiza los elementos del directorio de manera que todos los elementos
+        menores o iguales al pivote estan a la izquierda y todos los elementos mayores estan
+        a la derecha. El pivote se coloca en su posicion correcta.
         :param inicio: La posición inicial
-        :param fin: La posición final
+        :param fin: La posicion final
         :param comparador: El comparador con el que se desea hacer el ordenamiento
-        :return: La posición correcta del pivote
+        :return: La posicion correcta del pivote
         :rtype: int
         """
         pivote = self.directorio[inicio]
@@ -306,89 +304,422 @@ class Directorio:
         self.directorio[inicio], self.directorio[right] = self.directorio[right], self.directorio[inicio]
         return right  # Devolvemos la posición correcta del pivote
 
-    def ordenar_directorio(self, inicio, fin, comparador): #quick sort
+    # Quick sort
+    def ordenar_directorio(self, inicio, fin, comparador):
         """
-        Esta función aplica recursivamente el algoritmo Quick Sort a los subarreglos definidos por el pivote.
-        :param arreglo: int[] Arreglo de enteros
-        :param inicio: La posición inicial
-        :param fin: La posición final
+        Esta funcion aplica recursivamente el algoritmo Quick Sort a los subarreglos definidos por el pivote.
+        :param inicio: La posicion inicial
+        :param fin: La posicion final
         :param comparador: El comparador con el que se desea hacer el ordenamiento
-        :return: int[] Arreglo de enteros ordenado
-        :rtype: int[]
+        :return: Arreglo de contactos ordenado
         """
         if inicio < fin:
-            posicion_part = self.__particion(self.directorio, inicio, fin, comparador)
-            self.quick_sort(self.directorio, inicio, posicion_part - 1, comparador)
-            self.quick_sort(self.directorio, posicion_part + 1, fin, comparador)
+            posicion_part = self.__particion(inicio, fin, comparador)
+            self.ordenar_directorio(inicio, posicion_part - 1, comparador)
+            self.ordenar_directorio(posicion_part + 1, fin, comparador)
         return self.directorio
 
-    def ascendente(a: cP.Persona, b: cP.Persona) -> int:
+# Tipos de comparadores: Ordenar alfabeticamente
+    def __compare_strings(self, str1: str, str2: str) -> int:
         """
-        Método para determinar la relación de los Empleados con respecto a la edad
-        :param a: El primer Empleado a comparar por edad
-        :param b: El segundo Empleado a comparar por edad
-        :return: Valor positivo si la edad de a es menor que b, cero si son iguales,
-                 negativo en otro caso
+        Metodo privado para comparar dos cadenas y devolver su relacion de orden en terminos de un int
+        :param str1: Primera cadena a comparar
+        :param str2: Segunda cadena a comparar
+        :return: -1 si str1 lexicograficamente es menor que str2, 0 si son iguales, 1 en otro caso
         """
-        return a.edad() - b.edad()
+        if str1 < str2:
+            return -1
+        elif str1 > str2:
+            return 1
+        else:
+            return 0
 
-    def descendente(a: e.Empleado, b: e.Empleado) -> float:
+    def nombre_comparador(self, a: cP.Persona.nombre_completo, b: cP.Persona.nombre_completo):
         """
-        Método para determinar la relación de los Empleados con respecto al salario
-        :param a: El primer Empleado a comparar por salario
-        :param b: El segundo Empleado a comparar por salario
-        :return: Valor positivo si el salario de b es mayor que a, cero si son iguales,
-                 negativo en otro caso
+        Metodo para determinar la relacion de los Contactos con respecto al nombre.
+        :param a: El nombre del primer Contacto a comparar
+        :param b: El nombre del segundo Contacto a comparar
+        :return: Valor positivo si el nombre de a es mayor que b, negativo si el nombre de
+                 b es mayo que a. Si es el mismo nombre, regresa un 0.
         """
-        return b.salario - a.salario
+        dif_nombre = self.__compare_strings(a, b)
+        return dif_nombre
+
     def mostrar_informacion_contacto(self, nombre, rol):
         """
-        Muestra la información completa de un contacto, dado su nombre y rol.
+        Muestra la informacion completa de un contacto, dado su nombre y rol.
+        La informacion se muestra agrupada por categoria (alumno, profesor o coordinador).
         Los contactos se muestran ordenados.
+        :param nombre:str -el nombre completo del contacto
+        :param rol - tipo de objeto
+        :return un string con la informacion completa del contacto con esas caracteristicas.
         """
-        self.ordenar_directorio()
-        for persona in self.directorio:
-            if isinstance(persona, rol) and persona.nombre_completo == nombre:
-                print(persona)
-                return
-        print(f"No se encontró {rol.__name__} con el nombre: {nombre}")
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        for contacto in self.directorio:
+            if contacto.nombre_completo == nombre and isinstance(contacto, rol):
+                return contacto
+        print('No existe un contacto con esas caracteristicas')
 
     def eliminar_contacto(self, nombre):
         """
         Elimina los datos de un contacto a partir del nombre.
         """
-        pass
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        for persona in self.directorio:
+            if persona and persona.nomnre_completo == nombre:
+                self.eliminar(persona)
+                print(f"El contacto con el nombre: '{nombre}' ha sido eliminado.")
+            else:
+                print(f"No se encontro contacto con el nombre completo: {nombre}")
 
-    def actualizar_contacto(self, nombre, nuevos_datos):
+    def menu_actualizar_alumno(self) -> str:
         """
-        Actualiza la información de un contacto a partir del nombre.
+        Metodo auxiliar, que muestra en pantalla las opciones para actualizar un Alumno
+        :return: opcion: Int - La opcion deseada para actualizar
+        :rtype: Str
         """
-        pass
+        while True:
+            opcion = input('Que deseas actualizar:\n'
+                           '1. Nombre Completo\n'
+                           '2. Celular\n'
+                           '3. Fecha Cumpleanios\n'
+                           '4. Email\n'
+                           '5. Num. Cuenta\n'
+                           '6. Carrera \n'
+                           '7. Materias\n'
+                           '8. Semestre\n'
+                           'S. Salir \n').upper()
+            if opcion not in '1,2,3,4,5,6,7,8,S' or len(opcion) != 1:
+                print("Opcion invalida.")
+                continue
+            else:
+                break
+        return opcion
 
-    def mostrar_contactos_por_sueldo(self, sueldo):
+    def menu_actualizar_profesor(self) -> str:
+        """
+        Metodo auxiliar, que muestra en pantalla las opciones para actualizar un Profesor
+        :return: opcion: Int - La opcion deseada para actualizar
+        :rtype: Str
+        """
+        while True:
+            opcion = input('Que deseas actualizar:\n'
+                           '1. Nombre Completo\n'
+                           '2. Celular\n'
+                           '3. Fecha Cumpleanios\n'
+                           '4. Email\n'
+                           '5. Num. Profesor\n'
+                           '6. Tel. Oficina \n'
+                           '7. Sueldo\n'
+                           '8. Dept. Adscripcion\n'
+                           '9. Carrera donde imparte materias\n'
+                           '10. Grupos\n'
+                           'S. Salir \n').upper()
+            if opcion not in '1,2,3,4,5,6,7,8,9,10,S' or len(opcion) != 1:
+                print("Opcion invalida.")
+                continue
+            else:
+                break
+        return opcion
+
+    def menu_actualizar_coordinador(self) -> str:
+        """
+        Metodo auxiliar, que muestra en pantalla las opciones para actualizar un Profesor
+        :return: opcion: Int - La opcion deseada para actualizar
+        :rtype: Str
+        """
+        while True:
+            opcion = input('Que deseas actualizar:\n'
+                           '1. Nombre Completo\n'
+                           '2. Celular\n'
+                           '3. Fecha Cumpleanios\n'
+                           '4. Email\n'
+                           '5. Num. Empleado\n'
+                           '6. Tel. Oficina \n'
+                           '7. Sueldo\n'
+                           '8. Dept. Adscripcion\n'
+                           '9. Carrera que coordina\n'
+                           'S. Salir \n').upper()
+            if opcion not in '1,2,3,4,5,6,7,8,9,S' or len(opcion) != 1:
+                print("Opcion invalida.")
+                continue
+            else:
+                break
+        return opcion
+
+    def actualizar_alumno(self):
+        """
+        Metodo para actualizar un contacto del tipo allumno, si se encuentra el nombre completo del alumno
+        desplegara un menu para saber que valor actualizar. Si no imprimira un mensaje.
+        """
+        nom_completo = input('Escribe el nombre completo del alumno: ')
+        indice = self.buscar_indice(nom_completo)
+        if indice == -1:
+            print(f"No se encuentra el alumno con nombre completo {nom_completo}")
+        else:
+            alumno = self.directorio[indice]
+            if isinstance(alumno, cA.Alumno) and not isinstance(alumno, cPr.Profesor):
+                print(alumno)
+                opcion = ''
+                while opcion != 'S':
+                    opcion = self.menu_actualizar_alumno()
+
+                    match opcion:
+                        case "1":
+                            nuevonombre = input('Escribe el nuevo nombre del Alumno a actualizar: ')
+                            alumno.nombre_completo = nuevonombre
+                            print('Nombre Actualizado \n')
+                            opcion = ''
+
+                        case "2":
+                            nuevocelular = int(input('Escribe la nuevo celular del alumno: '))
+                            alumno.celular = nuevocelular
+                            print('Celular Actualizado \n')
+                            opcion = ''
+
+                        case "3":
+                            nuevocumple = int(input('Escribe el nuevo cumpleanios del alumno: '))
+                            alumno.fecha_cumpleanios = nuevocumple
+                            print('Cumpleanios Actualizado \n')
+                            opcion = ''
+
+                        case "4":
+                            nuevoemail = input('Escribe el nuevo email del alumno: ')
+                            alumno.email = nuevoemail
+                            print('Email Actualizado \n')
+                            opcion = ''
+
+                        case "5":
+                            while True:
+                                try:
+                                    nuevonumcuenta = int(input('Escribe el nuevo numero de cuenta del alumno: '))
+                                    break
+                                except ValueError:
+                                    print('El numero de cuenta del alumno, tiene que ser un entero')
+                            self.numeros_cuenta.remove(alumno.num_cuenta)
+                            alumno.num_cuenta = nuevonumcuenta
+                            self.numeros_cuenta.add(alumno.num_cuenta)
+                            print('Numero de Cuenta Actualizado \n')
+                            opcion = ''
+
+                        case "6":
+                            nueva_carrera = input('Escribe la nueva carrera del alumno: ')
+                            alumno.carrera = nueva_carrera
+                            print('Carrera Actualizada \n')
+                            opcion = ''
+
+                        case "7":
+                            nuevamaterias = list(input('Escribe la nueva lista de materias del alumno: '))
+                            alumno.materias = nuevamaterias
+                            print('Materias Actualizadas \n')
+                            opcion = ''
+
+                        case "8":
+                            nuevsemestre = int(input('Escribe la nueva lista de materias del alumno: '))
+                            alumno.semestre = nuevsemestre
+                            print('Materias Actualizadas \n')
+                            opcion = ''
+
+                        case "S":
+                            print('Volviendo ...')
+            else:
+                print(f"No se encuentra el alumno con nombre {nom_completo}")
+
+    def actualizar_profesor(self):
+        """
+        Metodo para actualizar un contacto del tipo Profesor, si se encuentra el nombre completo del profesor
+        desplegara un menu para saber que valor actualizar. Si no imprimira un mensaje.
+        """
+        nomcompleto = input('Escribe el nombre completo del profesor: ')
+        indice = self.buscar_indice(nomcompleto)
+        if indice == -1:
+            print(f"No se encuentra el profesor con nombre completo {nomcompleto}")
+        else:
+            profesor = self.directorio[indice]
+            if isinstance(profesor, cPr.Profesor) and not isinstance(profesor, cC.Coordinador):
+                print(profesor)
+                opcion = ''
+                while opcion != 'S':
+                    opcion = self.menu_actualizar_profesor()
+
+                    match opcion:
+                        case "1":
+                            nuevonombre = input('Escribe el nuevo nombre del profesor a actualizar: ')
+                            profesor.nombre_completo = nuevonombre
+                            print('Nombre Actualizado \n')
+                            opcion = ''
+
+                        case "2":
+                            nuevocelular = int(input('Escribe la nuevo celular del profesor: '))
+                            profesor.celular = nuevocelular
+                            print('Celular Actualizado \n')
+                            opcion = ''
+
+                        case "3":
+                            nuevocumple = int(input('Escribe el nuevo cumpleanios del profesor: '))
+                            profesor.fecha_cumpleanios = nuevocumple
+                            print('Cumpleanios Actualizado \n')
+                            opcion = ''
+
+                        case "4":
+                            nuevoemail = input('Escribe el nuevo email del profesor: ')
+                            profesor.email = nuevoemail
+                            print('Email Actualizado \n')
+                            opcion = ''
+
+                        case "5":
+                            while True:
+                                try:
+                                    nuevonumprofesor = int(input('Escribe el nuevo numero de profesor: '))
+                                    break
+                                except ValueError:
+                                    print('El numero de cuenta del profesor, tiene que ser un entero')
+                            self.numeros_profesor.remove(profesor.num_cuenta)
+                            profesor.num_cuenta = nuevonumprofesor
+                            self.numeros_profesor.add(profesor.num_cuenta)
+                            print('Numero de Profesor Actualizado \n')
+                            opcion = ''
+
+                        case "6":
+                            nuevoteloficina = int(input('Escribe el nuevo telefono de oficina del profesor: '))
+                            profesor.tel_oficina = nuevoteloficina
+                            print('Tel. Oficina Actualizado \n')
+                            opcion = ''
+
+                        case "7":
+                            nuevosueldo = int(input('Escribe el nuevo sueldo del profesor: '))
+                            profesor.sueldo = nuevosueldo
+                            print('Sueldo Actualizado \n')
+                            opcion = ''
+
+                        case "8":
+                            nuevodeptads = input('Escribe el nuevo Dept. de Ads. del profesor: ')
+                            profesor.dept_ads = nuevodeptads
+                            print('Dept. de Ads. Actualizado \n')
+                            opcion = ''
+
+                        case "9":
+                            nuevocarrera = input('Escribe la nueva carrera donde imparte materias el profesor: ')
+                            profesor.dept_ads = nuevocarrera
+                            print('Carrera Actualizada \n')
+                            opcion = ''
+
+                        case '10':
+                            nuevgrup = list(input('Escribe la nueva lista de grupos del profesor: '))
+                            profesor.grupos = nuevgrup
+                            print('Materias Actualizadas \n')
+                            opcion = ''
+
+                        case "S":
+                            print('Volviendo ...')
+            else:
+                print(f"No se encuentra el profesor con nombre {nomcompleto}")
+
+    def actualizar_coordinador(self):
+        """
+        Metodo para actualizar un contacto del tipo Coordinador, si se encuentra el nombre completo del coordinador
+        desplegara un menu para saber que valor actualizar. Si no imprimira un mensaje.
+        """
+        nomcompleto = input('Escribe el nombre completo del coordinador: ')
+        indice = self.buscar_indice(nomcompleto)
+        if indice == -1:
+            print(f"No se encuentra el coordinador con nombre completo {nomcompleto}")
+        else:
+            coordinador = self.directorio[indice]
+            if isinstance(coordinador, cC.Coordinador) and not isinstance(coordinador, cPr.Profesor):
+                print(coordinador)
+                opcion = ''
+                while opcion != 'S':
+                    opcion = self.menu_actualizar_coordinador()
+
+                    match opcion:
+                        case "1":
+                            nuevonombre = input('Escribe el nuevo nombre del coordinador a actualizar: ')
+                            coordinador.nombre_completo = nuevonombre
+                            print('Nombre Actualizado \n')
+                            opcion = ''
+
+                        case "2":
+                            nuevocelular = int(input('Escribe la nuevo celular del coordinador: '))
+                            coordinador.celular = nuevocelular
+                            print('Celular Actualizado \n')
+                            opcion = ''
+
+                        case "3":
+                            nuevocumple = int(input('Escribe el nuevo cumpleanios del coordinador: '))
+                            coordinador.fecha_cumpleanios = nuevocumple
+                            print('Cumpleanios Actualizado \n')
+                            opcion = ''
+
+                        case "4":
+                            nuevoemail = input('Escribe el nuevo email del coordinador: ')
+                            coordinador.email = nuevoemail
+                            print('Email Actualizado \n')
+                            opcion = ''
+
+                        case "5":
+                            while True:
+                                try:
+                                    nuevonumempleado = int(
+                                        input('Escribe el nuevo numero de empleado del coordinador: '))
+                                    break
+                                except ValueError:
+                                    print('El numero de empleado del coordinador, tiene que ser un entero')
+                            self.numeros_empleado.remove(coordinador.num_empleado)
+                            coordinador.num_empleado = nuevonumempleado
+                            self.numeros_empleado.add(coordinador.num_empleado)
+                            print('Numero de Empleado Actualizado \n')
+                            opcion = ''
+
+                        case "6":
+                            nuevoteloficina = int(input('Escribe el nuevo telefono de oficina del coordinador: '))
+                            coordinador.tel_oficina = nuevoteloficina
+                            print('Tel. Oficina Actualizado \n')
+                            opcion = ''
+
+                        case "7":
+                            nuevosueldo = int(input('Escribe el nuevo sueldo del coordinador: '))
+                            coordinador.sueldo = nuevosueldo
+                            print('Sueldo Actualizado \n')
+                            opcion = ''
+
+                        case "8":
+                            nuevodeptads = input('Escribe el nuevo Dept. de Ads. del coordinador: ')
+                            coordinador.dept_ads = nuevodeptads
+                            print('Dept. de Ads. Actualizado \n')
+                            opcion = ''
+
+                        case "9":
+                            nuevocarrera = input('Escribe la nueva carrera que coordina: ')
+                            coordinador.dept_ads = nuevocarrera
+                            print('Carrera Actualizada \n')
+                            opcion = ''
+
+                        case "S":
+                            print('Volviendo ...')
+            else:
+                print(f"No se encuentra el coordinador con nombre {nomcompleto}")
+
+    def mostrar_contactos_por_sueldo(self, sueldo: int):
         """
         Muestra todos los contactos con un sueldo determinado.
         La información se muestra agrupada por categoría (profesor o coordinador).
         Los contactos se muestran ordenados.
+        :param sueldo: int - el sueldo especifico que busco
+        :return un string ordenado que divide profesores y coordinadores con ese sueldo especifico.
         """
-        pass
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        profesores = ''
+        coordinadores = ''
+        for contacto in self.directorio:
+            if contacto is not None and contacto.sueldo == sueldo:
+                if isinstance(contacto, cPr.Profesor):
+                    profesores += str(contacto) + '\n'
+                if isinstance(contacto, cC.Coordinador):
+                    coordinadores += str(contacto) + '\n'
+        return "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Issac
+    # Issac
     def contiene(self, contacto) -> bool:
         """
         Metodo que permite determinar si un contacto esta contenido en el Directorio
@@ -399,6 +730,7 @@ class Directorio:
             if self.directorio[i] == contacto:  # Lo encontro
                 return True
         return False  # No lo encontro
+
     def eliminar(self, contacto):
         """
         Este metodo permitira eliminar un contacto del directorio.
@@ -424,11 +756,10 @@ class Directorio:
         """
         Elimina los datos de un contacto a partir del numero de celular.
         """
-        self.ordenar_directorio() #######DEFINIR METODO ORDENAR DIRECTORIO
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
         for persona in self.directorio:
             if persona and persona.celular == celular:
-                self.directorio.eliminar(persona)   ###### Remove no podemos usarlo
-                self.num_personas -= 1
+                self.eliminar(persona)
                 print(f"El contacto con el numero de celular: '{celular}' ha sido eliminado.")
                 return
         print(f"No se encontro contacto con el numero de celular: {celular}")
@@ -437,27 +768,27 @@ class Directorio:
         """
         Elimina los datos de un contacto a partir del correo electronico.
         """
-        self.ordenar_directorio() #######DEFINIR METODO ORDENAR DIRECTORIO
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
         for persona in self.directorio:
             if persona and persona.email == correo:
-                self.directorio.eliminar(persona)
-                self.num_personas -= 1
+                self.eliminar(persona)
                 print(f"El contacto con el correo electrónico: '{correo}' ha sido eliminado.")
                 return
 
-    def buscar_indice_cum(self, cumpleaños) -> int:
+    def buscar_indice_cum(self, cumpleanios) -> int:
         """
         Método auxiliar que busca el índice del arreglo de directorio, dado la fecha de cumpleaños de una persona.
 
-        :param cumpleaños: La fecha de cumpleaños a buscar en el directorio.
+        :param cumpleanios: La fecha de cumpleaños a buscar en el directorio.
         :return: El índice (int) del arreglo del directorio si se encuentra un valor >= 0.
                  Si no se encuentra en el arreglo, retorna un valor < 0.
         :rtype: int
         """
         for persona in self.directorio:
-            if persona is not None and persona.fecha_cumpleanios == cumpleaños:
+            if persona is not None and persona.fecha_cumpleanios == cumpleanios:
                 return int(np.where(self.directorio == persona)[0][0])
         return -1
+
     def buscar_indice_cel(self, celular) -> int:
         """
         Método auxiliar que busca el índice del arreglo de directorio, dado el número de celular de una persona.
@@ -471,83 +802,64 @@ class Directorio:
             if persona is not None and persona.celular == celular:
                 return int(np.where(self.directorio == persona)[0][0])
         return -1
-    def buscar_contacto_celular(self, celular):
+
+    def buscar_contacto_celular(self, celular: int):
         """
         Metodo __str__ que define como mostrar una persona dentro del directorio.
         La representa a traves de los elementos en el array.
-        :param celular: número de celular del contacro
+        :param celular:int - numero de celular del contacto
         :return: cadena: Str - La representacion de la persona en el directorio
         :rtype: Str
         """
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
         if not self.esta_vacio():
-            posicion = self.buscar_indice_cel(celular)
-            persona = self.directorio[posicion]
-            if isinstance(persona, cA.Alumno):
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
-                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
-                        "\nNum. Cuenta:\n" + str(persona.num_cuenta) + "\nCarrera:\n" + persona.carrera +
-                        "\nMaterias:\n" + str(persona.materias) + "\nSemestre:\n" + str(persona.semestre))
-            elif isinstance(persona, cPr.Profesor):
-                cPr.setlocale(cPr.LC_MONETARY, "en_US")
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
-                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
-                        "\nNum. Profesor:\n" + str(persona.num_profesor) + "\nTel. Oficina:\n" +
-                        str(persona.tel_oficina) + "\nSueldo:\n" + cPr.currency(persona.sueldo, grouping=True) +
-                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera donde imparte materias:\n" +
-                        persona.carrera + "\nGrupos:\n" + str(persona.grupos))
-
-            elif isinstance(persona, cC.Coordinador):
-                cC.setlocale(cC.LC_MONETARY, "en_US")
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
-                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
-                        "\nNum. Empleado:\n" + str(persona.num_empleado) + "\nTel. Oficina:\n" +
-                        str(persona.tel_oficina) + "\nSueldo:\n" + cC.currency(persona.sueldo, grouping=True) +
-                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera que coordina:\n" + persona.carrera_coordina)
+            alumnos = ''
+            profesores = ''
+            coordinadores = ''
+            for contacto in self.directorio:
+                if contacto is not None and contacto.celular == celular:
+                    if isinstance(contacto, cA.Alumno):
+                        alumnos += str(contacto) + '\n'
+                    if isinstance(contacto, cPr.Profesor):
+                        profesores += str(contacto) + '\n'
+                    if isinstance(contacto, cC.Coordinador):
+                        coordinadores += str(contacto) + '\n'
+                return "\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
         return "No hay contactos."
 
-    def buscar_contacto_cum(self, cumpleanos):
+    def buscar_contacto_cum(self, cumpleanios: int):
         """
-        Metodo __str__ que define como mostrar una persona dentro del directorio.
-        La representa a traves de los elementos en el array.
-        :param cumpleaños: cumpleaños del contacto
+        Metodo __str__ que define como mostrar una persona dentro del directorio a partir de su cumpleanios.
+        La representa a traves de los elementos en el directorio.
+        :param cumpleanios: cumpleanios del contacto
         :return: cadena: Str - La representacion de la persona en el directorio
         :rtype: Str
         """
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
         if not self.esta_vacio():
-            posicion = self.buscar_indice_cum(cumpleanos)
-            persona = self.directorio[posicion]
-            if isinstance(persona, cA.Alumno):
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
-                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
-                        "\nNum. Cuenta:\n" + str(persona.num_cuenta) + "\nCarrera:\n" + persona.carrera +
-                        "\nMaterias:\n" + str(persona.materias) + "\nSemestre:\n" + str(persona.semestre))
-            elif isinstance(persona, cPr.Profesor):
-                cPr.setlocale(cPr.LC_MONETARY, "en_US")
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
-                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
-                        "\nNum. Profesor:\n" + str(persona.num_profesor) + "\nTel. Oficina:\n" +
-                        str(persona.tel_oficina) + "\nSueldo:\n" + cPr.currency(persona.sueldo, grouping=True) +
-                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera donde imparte materias:\n" +
-                        persona.carrera + "\nGrupos:\n" + str(persona.grupos))
-
-            elif isinstance(persona, cC.Coordinador):
-                cC.setlocale(cC.LC_MONETARY, "en_US")
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
-                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
-                        "\nNum. Empleado:\n" + str(persona.num_empleado) + "\nTel. Oficina:\n" +
-                        str(persona.tel_oficina) + "\nSueldo:\n" + cC.currency(persona.sueldo, grouping=True) +
-                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera que coordina:\n" + persona.carrera_coordina)
+            alumnos = ''
+            profesores = ''
+            coordinadores = ''
+            for contacto in self.directorio:
+                if contacto is not None and contacto.cumpleanios == cumpleanios:
+                    if isinstance(contacto, cA.Alumno):
+                        alumnos += str(contacto) + '\n'
+                    if isinstance(contacto, cPr.Profesor):
+                        profesores += str(contacto) + '\n'
+                    if isinstance(contacto, cC.Coordinador):
+                        coordinadores += str(contacto) + '\n'
+                return "\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
         return "No hay contactos."
 
+    # Carlos
 
-# Carlos
-    def __str__(self) -> (str,str,str):
+    def __str__(self) -> (str, str, str):
         """
         Metodo que permitira mostrar un contacto de la clase Directorio.
         :return: Una cadena de caracteres que incluiran la informacion de contacto.
         """
         cadena = ''
-        self.ordenar_directorio() #####definir ordenamiento de directorio
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
         alumnos = []
         profesores = []
         coordinadores = []
@@ -559,81 +871,60 @@ class Directorio:
             elif isinstance(self.directorio[i], cC.Coordinador):
                 coordinadores.append(self.directorio[i])
         if alumnos:
-            cadena + '\nAlumnos: '
+            cadena += '\nAlumnos: '
             for alumno in alumnos:
-                cadena + f'\n{str(alumno)}'
+                cadena += f'\n{str(alumno)}'
         else:
-            cadena + '\n\nNo hay alumnos registrados'
-
+            cadena += '\n\nNo hay alumnos registrados'
 
         if profesores:
-            cadena + '\n\nProfesores: '
+            cadena += '\n\nProfesores: '
             for profesor in profesores:
-                cadena + f'\n{str(profesor)}'
+                cadena += f'\n{str(profesor)}'
         else:
-            cadena + '\n\nNo hay profesores registrados'
+            cadena += '\n\nNo hay profesores registrados'
 
         if coordinadores:
-            cadena + '\n\nCoordinadores: '
+            cadena += '\n\nCoordinadores: '
             for coordinador in coordinadores:
-                cadena + f'\n{str(coordinador)}'
+                cadena += f'\n{str(coordinador)}'
         else:
-            cadena + '\n\nNo hay coordinadores registrados'
+            cadena += '\n\nNo hay coordinadores registrados'
         return cadena
 
-    def mostrar_contactos_con_email(self): ###### Los datos deben mostrarse ordenados
+    def mostrar_contactos_con_email(self):
         """
         Muestra los contactos por categoria y ordenados
         Obs: por como fue definido la clase Persona, los objetos persona
         tienen un email valido.
         """
-        self.ordenar_directorio()
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
         copia = copy.deepcopy(self)
         copia.eliminar_email(None)
         copia.eliminar_email('')
         print(copia)
 
-    def mostrar_contactos_de_carrera(self, carrera_particular): ###### Los datos deben mostrarse ordenados
+    def mostrar_contactos_por_carrera(self, carrera_particular: str):
         """
-        Muestra los contactos de una carrera particular
-        :param carrera_particular: str -  Nombre de la carrera
+        Muestra todos los contactos con una carrera particular.
+        La información se muestra agrupada por categoría (alumno, profesor o coordinador).
+        Los contactos se muestran ordenados.
+        :param carrera_particular: str -la carrera especifica que busco
+        :return un string ordenado que divide alumnos, profesores y coordinadores con esa carrera especifica.
         """
-        alumnos_en_carrera = []
-        profesores_de_carrera = []
-        coordinadores_de_carrera = []
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        alumnos = ''
+        profesores = ''
+        coordinadores = ''
+        for contacto in self.directorio:
+            if isinstance(contacto, cA.Alumno) and contacto.carrera == carrera_particular:
+                alumnos += str(contacto) + '\n'
+            elif isinstance(contacto, cPr.Profesor) and contacto.carrera == carrera_particular:
+                profesores += str(contacto) + '\n'
+            elif isinstance(contacto, cC.Coordinador) and contacto.carrera_coordina == carrera_particular:
+                coordinadores += str(contacto) + '\n'
 
-        self.ordenar_directorio()
-        for i in range(self.num_personas):
-            if isinstance(self.directorio[i], cA.Alumno):
-                if self.directorio[i].carrera() == carrera_particular:
-                    alumnos_en_carrera.append(self.directorio[i])
-            elif isinstance(self.directorio[i],cPr.Profesor):
-                if self.directorio[i].carrera() == carrera_particular:
-                    profesores_de_carrera.append(self.directorio[i])
-            elif isinstance(self.directorio[i], cC.Coordinador):
-                if self.directorio[i].carrera_coordina() == carrera_particular:
-                    coordinadores_de_carrera.append(self.directorio[i])
-
-        if alumnos_en_carrera:
-            print(f'Alumnos en {carrera_particular}:')
-            for alumno in alumnos_en_carrera:
-                    print(alumno)
-        else:
-            print(f'No hay alumnos en {carrera_particular}')
-
-        if profesores_de_carrera:
-            print(f'Profesores de {carrera_particular}:')
-            for profesor in profesores_de_carrera:
-                print(profesor)
-        else:
-            print(f'No hay profesores de {carrera_particular}')
-
-        if coordinadores_de_carrera:
-            print(f'Coordinadores de {carrera_particular}:')
-            for coordinador in coordinadores_de_carrera:
-                    print(coordinador)
-        else:
-            print(f'No hay coordinadores de {carrera_particular}')
+        return "\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
 
     def mostrar_alumnos_o_profesores(self, eleccion):
         """
@@ -641,8 +932,7 @@ class Directorio:
         Esto segun la eleccion del usuario
         :param eleccion: 0 si alumnos, 1 si maestros
         """
-
-        self.ordenar_directorio()
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
         if eleccion == 0:
             alumnos = []
             for i in range(self.num_personas):
