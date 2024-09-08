@@ -1,11 +1,3 @@
-tipo,num_emp,nombre,apellidos,nacimiento,mail,salario
-a,1,Juan,López,26/03/1990,acackett1a@imageshack.us,39269.73
-a,2,Pedro,Hernández,03/01/2004,glattey1@howstuffworks.com,31838.93
-p,3,Ana,Sánchez,06/06/1993,mlambourne2@discovery.com,39269.73
-c,4,Laura,Sánchez,06/03/2003,adimatteo3@goodreads.com,9913.6
-p,5,Juan,Rodríguez,13/12/1992,nsurtees4@wordpress.org,19773.64
-a,6,Laura,López,25/08/2002,rbenedetti5@earthlink.net,17125.59
-c,7,Alejandro,González,22/12/1993,dgumbrell6@ucoz.ru,21273.05
-a,8,Diego,Torres,07/01/1992,tlamswood7@google.fr,39269.73
-
-
+a,Juan López,5532134532,26/03/1990,acackett1a@imageshack.us,39269, Matematicas Aplicadas, [algebra, calculo, mates discretas], 3
+c,Pedro Hernández,552443277,03/01/2004,glattey1@howstuffworks.com,245783, 02387443, 31838.93, Matematicas, Biologia
+p,Ana Sánchez,55435676, 06/06/1993,mlambourne2@discovery.com,13453,8264843,39269.73,Biologia, Fisica, Biologia Marina, [sustentabilidad, bioetica]
