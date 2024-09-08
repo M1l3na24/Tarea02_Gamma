@@ -167,16 +167,16 @@ if __name__ == "__main__":
                             match opcion:
                                 case '1':
                                     directorio.mostrar_persona()
-                                #case '2':
-                                    #directorio.()
-                                #case '3':
-                                    #directorio.()
-                                #case "4":
-                                    #directorio.()
-                                #case '5':
-                                    #directorio.()
-                                #case '6':
-                                    #directorio.()
+                                case '2':
+                                    directorio.mostrar_informacion_contacto()
+                                case '3':
+                                    directorio.mostrar_contactos_por_sueldo()
+                                case "4":
+                                    directorio.mostrar_contactos_con_email()
+                                case '5':
+                                    directorio.mostrar_contactos_por_carrera()
+                                case '6':
+                                    directorio.mostrar_alumnos_o_profesores()
                                 case '7':
                                     directorio.buscar_contacto_cum()
                                 case "8":
@@ -188,8 +188,8 @@ if __name__ == "__main__":
                         while opcion != 'S':
                             opcion = menuEliminar()
                             match opcion:
-                                #case '1':
-                                    #directorio.()
+                                case '1':
+                                    directorio.eliminar_contacto()
                                 case '2':
                                     directorio.eliminar_cel()
                                 case '3':
@@ -201,12 +201,12 @@ if __name__ == "__main__":
                         while opcion != 'S':
                             opcion = menuActualizar()
                             match opcion:
-                                #case '1':
-                                    #directorio.()
-                                #case '2':
-                                    #directorio.()
-                                #case '3':
-                                    #directorio.()
+                                case '1':
+                                    directorio.actualizar_alumno()
+                                case '2':
+                                    directorio.actualizar_profesor()
+                                case '3':
+                                    directorio.actualizar_coordinador()
                                 case 'S':
                                     print('Regresando al menu principal')
                         opcion = ''
@@ -237,16 +237,16 @@ if __name__ == "__main__":
                             match opcion:
                                 case '1':
                                     directorio.mostrar_persona()
-                                #case '2':
-                                    #directorio.()
-                                #case '3':
-                                    #directorio.()
-                                #case "4":
-                                    #directorio.()
-                                #case '5':
-                                    #directorio.()
-                                #case '6':
-                                    #directorio.()
+                                case '2':
+                                    directorio.mostrar_informacion_contacto()
+                                case '3':
+                                    directorio.mostrar_contactos_por_sueldo()
+                                case "4":
+                                    directorio.mostrar_contactos_con_email()
+                                case '5':
+                                    directorio.mostrar_contactos_por_carrera()
+                                case '6':
+                                    directorio.mostrar_alumnos_o_profesores()
                                 case '7':
                                     directorio.buscar_contacto_cum()
                                 case "8":
@@ -258,8 +258,8 @@ if __name__ == "__main__":
                         while opcion != 'S':
                             opcion = menuEliminar()
                             match opcion:
-                                #case '1':
-                                    #directorio.()
+                                case '1':
+                                    directorio.eliminar_contacto()
                                 case '2':
                                     directorio.eliminar_cel()
                                 case '3':
@@ -271,12 +271,12 @@ if __name__ == "__main__":
                         while opcion != 'S':
                             opcion = menuActualizar()
                             match opcion:
-                                #case '1':
-                                    #directorio.()
-                                #case '2':
-                                    #directorio.()
-                                #case '3':
-                                    #directorio.()
+                                case '1':
+                                    directorio.actualizar_alumno()
+                                case '2':
+                                    directorio.actualizar_profesor()
+                                case '3':
+                                    directorio.actualizar_coordinador()
                                 case 'S':
                                     print('Regresando al menu principal')
                         opcion = ''
