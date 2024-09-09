@@ -125,10 +125,8 @@ def menu_mostrar_info():
                         "4. Mostrar por correo electronico\n"
                         "5. Mostrar por carrera\n"
                         "6. Mostrar por alumnos o profesores\n"
-                        "7. Mostrar por cumpleaños"
-                        "8. Mostrar por número de celular\n"
                         'S. Salir \n').upper()
-        if opcionn not in '1,2,3,4,5,6,7,8,S' or len(opcionn) != 1:
+        if opcionn not in '1,2,3,4,5,6,S' or len(opcionn) != 1:
             print('Opcion incorrecta')
             continue
         else:
