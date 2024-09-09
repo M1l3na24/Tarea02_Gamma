@@ -20,8 +20,9 @@ def menu_principal() -> str:
                         '2. Mostrar información de un contacto\n'
                         '3. Eliminar información de un contacto\n'
                         '4. Actualizar los datos de un contacto \n'
+                        "5. Buscar contacto"
                         'S. Guardar y Salir \n').upper()
-        if opcionn not in '1,2,3,4,S' or len(opcionn) != 1:
+        if opcionn not in '1,2,3,4,5,S' or len(opcionn) != 1:
             print('Opcion incorrecta')
             continue
         else:
@@ -30,6 +31,25 @@ def menu_principal() -> str:
 
 
 def menu_insertar_datos() -> str:
+    """
+    Metodo auxiliar que despliega las opciones que podemos realizar al insertar los datos de los contactos
+    :return: opcion: Str - La opcion deseada a realizar
+    :rtype: Str
+    """
+    while True:
+        opcionn = input('Que deseas hacer:\n'
+                        '1. Agregar Alumno\n'
+                        '2. Agregar Profesor\n'
+                        '3. Agregar Coordinador\n'
+                        'S. Salir \n').upper()
+        if opcionn not in '1,2,3,S' or len(opcionn) != 1:
+            print('Opcion incorrecta')
+            continue
+        else:
+            break
+    return opcionn
+
+def menu_buscar() -> str:
     """
     Metodo auxiliar que despliega las opciones que podemos realizar al insertar los datos de los contactos
     :return: opcion: Str - La opcion deseada a realizar
@@ -167,9 +187,9 @@ if __name__ == "__main__":
                                 case '3':
                                     sueldo = int(input("Escribe el sueldo del contacto que deseas buscar: "))
                                     directorio.mostrar_contactos_por_sueldo(sueldo)
-                                # case "4": #### no tenemos metodo buscar email
-                                    # email = input("Escribe el correo electrónico del contacto que deseas buscar: ")
-                                    # directorio.buscar_contacto_email(email)
+                                case "4":
+                                    email = input("Escribe el correo electrónico del contacto que deseas buscar: ")
+                                    directorio.mostrar_per_email(email)
                                 case '5':
                                     carrera = input("Escribe la carrera relacionada al contacto que deseas buscar: ")
                                     directorio.mostrar_contactos_por_carrera(carrera)
@@ -177,12 +197,6 @@ if __name__ == "__main__":
                                     eleccion = int(input("Escribe 0 si deseas ver a los alumnos "
                                                          "o 1 si deseas ver a los profesores: "))
                                     directorio.mostrar_alumnos_o_profesores(eleccion)
-                                case '7':
-                                    nombre = input("Escribe el nombre")
-                                    directorio.buscar_contacto_cum(nombre)
-                                case "8":
-                                    cum = int(input("Escribe el cumpleaños del contacto que deseas buscar: "))
-                                    directorio.buscar_contacto_celular(cum)
                                 case 'S':
                                     print('Regresando al menu principal')
                         opcionn = ''
@@ -216,6 +230,17 @@ if __name__ == "__main__":
                                 case 'S':
                                     print('Regresando al menu principal')
                         opcionn = ''
+                    case '5':
+                      while opcionn != 'S':
+                          opcionn = menu_buscar()
+                          match opcionn:
+                              case '1':
+                                  cum = int(input("Escribe el cumpleaños del contacto que deseas buscar: "))
+                                  directorio.buscar_contacto_cum(cum)
+                              case "2":
+                                  cel = int(input("Escribe el número de celular del contacto que deseas buscar: "))
+                                  directorio.buscar_contacto_celular(cel)
+                      opcionn = ''
                     case 'S':
                         # dir.guardar_Archivo() no tenemos este metodo
                         print("Hasta luego")
@@ -251,22 +276,16 @@ if __name__ == "__main__":
                                 case '3':
                                     sueldo = int(input("Escribe el sueldo del contacto que deseas buscar: "))
                                     directorio.mostrar_contactos_por_sueldo(sueldo)
-                                #case "4": ### este metodo no lo tenemos
-                                   # email = input("Escribe el correo electrónico del contacto que deseas buscar: ")
-                                   # directorio.buscar_contacto_email(email)
+                                case "4": 
+                                    email = input("Escribe el correo electrónico del contacto que deseas buscar: ")
+                                    directorio.mostrar_per_email(email)
                                 case '5':
-                                    carrera = input("Escribe la carrera relacionada que deseas buscar: ")
+                                    carrera = input("Escribe la carrera relacionada al contacto que deseas buscar: ")
                                     directorio.mostrar_contactos_por_carrera(carrera)
                                 case '6':
-                                    eleccion = int(input(
-                                        "Escribe 0 si deseas ver a los alumnos o 1 si deseas ver a los profesores: "))
+                                    eleccion = int(input("Escribe 0 si deseas ver a los alumnos "
+                                                         "o 1 si deseas ver a los profesores: "))
                                     directorio.mostrar_alumnos_o_profesores(eleccion)
-                                case '7':
-                                    nombre = input("Escribe el cumpleaños del contacto que deseas buscar: ")
-                                    directorio.buscar_contacto_cum(nombre)
-                                case "8":
-                                    cum = int(input("Escribe el celular del contacto que deseas buscar: "))
-                                    directorio.buscar_contacto_celular(cum)
                                 case 'S':
                                     print('Regresando al menu principal')
                         opcionn = ''
@@ -278,8 +297,8 @@ if __name__ == "__main__":
                                     nombre = input("Escribe el nombre del contacto que deseas eliminar: ")
                                     directorio.eliminar_contacto(nombre)
                                 case '2':
-                                    celular = int(
-                                        input("Escribe el número de celular del contacto que deseas eliminar: "))
+                                    celular = int(input("Escribe el número de celular del "
+                                                        "contacto que deseas eliminar: "))
                                     directorio.eliminar_cel(celular)
                                 case '3':
                                     email = input("Escribe el correo electrónico del contacto que deseas eliminar: ")
@@ -299,8 +318,20 @@ if __name__ == "__main__":
                                     directorio.actualizar_coordinador()
                                 case 'S':
                                     print('Regresando al menu principal')
-                        opcionn2 = ''
+                        opcionn = ''
+                    case '5':
+                      while opcionn != 'S':
+                          opcionn = menu_buscar()
+                          match opcionn:
+                              case '1':
+                                  cum = int(input("Escribe el cumpleaños del contacto que deseas buscar: "))
+                                  directorio.buscar_contacto_cum(cum)
+                              case "2":
+                                  cel = int(input("Escribe el número de celular del contacto que deseas buscar: "))
+                                  directorio.buscar_contacto_celular(cel)
+                      opcionn = ''
                     case 'S':
+                        # dir.guardar_Archivo() no tenemos este metodo
                         print("Hasta luego")
         case 'S':
             print('Hasta luego')
