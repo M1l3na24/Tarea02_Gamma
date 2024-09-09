@@ -842,7 +842,7 @@ class Directorio:
                     if isinstance(contacto, cC.Coordinador):
                         coordinadores += str(contacto) + '\n'
                 print("\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
-        print "No hay contactos."
+        print ("No hay contactos.")
 
     def buscar_contacto_cum(self, cumpleanios: str):
         """
