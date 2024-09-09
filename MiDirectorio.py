@@ -166,21 +166,30 @@ if __name__ == "__main__":
                             opcion = menuMostrarInfo()
                             match opcion:
                                 case '1':
-                                    directorio.mostrar_persona()
+                                    nombre = input("Escribe el nombre del contacto que deseas buscar: ")
+                                    directorio.mostrar_persona(nombre)
                                 case '2':
-                                    directorio.mostrar_informacion_contacto()
+                                    nombre = input("Escribe el nombre del contacto que deseas buscar: ")
+                                    rol = input("Escribe el rol del contacto que deseas buscar: ")
+                                    directorio.mostrar_informacion_contacto(nombre, rol)
                                 case '3':
-                                    directorio.mostrar_contactos_por_sueldo()
+                                    sueldo = int(input("Escribe el sueldo del contacto que deseas buscar: "))
+                                    directorio.mostrar_contactos_por_sueldo(sueldo)
                                 case "4":
-                                    directorio.mostrar_contactos_con_email()
+                                    email = input("Escribe el correo electrónico del contacto que deseas buscar: ")
+                                    directorio.buscar_contacto_email(email)
                                 case '5':
-                                    directorio.mostrar_contactos_por_carrera()
+                                    carrera = input("Escribe la carrera relacionada al contacto que deseas buscar: ")
+                                    directorio.mostrar_contactos_por_carrera(carrera)
                                 case '6':
-                                    directorio.mostrar_alumnos_o_profesores()
+                                    eleccion = int(input("Escribe 0 si deseas ver a los alumnos o 1 si deseas ver a los profesores: "))
+                                    directorio.mostrar_alumnos_o_profesores(eleccion)
                                 case '7':
-                                    directorio.buscar_contacto_cum()
+                                    nombre = input("Escribe el nombre")
+                                    directorio.buscar_contacto_cum(nombre)
                                 case "8":
-                                    directorio.buscar_contacto_celular()
+                                    cum = input("Escribe el cumpleaños del contacto que deseas buscar: ")
+                                    directorio.buscar_contacto_celular(cum)
                                 case 'S':
                                     print('Regresando al menu principal')
                         opcion = ''
@@ -189,11 +198,14 @@ if __name__ == "__main__":
                             opcion = menuEliminar()
                             match opcion:
                                 case '1':
-                                    directorio.eliminar_contacto()
+                                    nombre = input("Escribe el nombre del contacto que deseas eliminar: ")
+                                    directorio.eliminar_contacto(nombre)
                                 case '2':
-                                    directorio.eliminar_cel()
+                                    celular = int(input("Escribe el número de celular del contacto que deseas eliminar: "))
+                                    directorio.eliminar_cel(celular)
                                 case '3':
-                                    directorio.eliminar_email()
+                                    email = input("Escribe el correo electrónico del contacto que deseas eliminar: ")
+                                    directorio.eliminar_email(email)
                                 case 'S':
                                     print('Regresando al menu principal')
                         opcion = ''
@@ -230,27 +242,37 @@ if __name__ == "__main__":
                                     directorio.insertar_nuevo_coordinador()
                                 case 'S':
                                     print('Regresando al menu principal')
-                        opcion = ""
+                        opcion = " "
                     case '2':
                         while opcion != 'S':
                             opcion = menuMostrarInfo()
                             match opcion:
                                 case '1':
-                                    directorio.mostrar_persona()
+                                    nombre = input("Escribe el nombre del contacto que deseas buscar: ")
+                                    directorio.mostrar_persona(nombre)
                                 case '2':
-                                    directorio.mostrar_informacion_contacto()
+                                    nombre = input("Escribe el nombre del contacto que deseas buscar: ")
+                                    rol = input("Escribe el rol del contacto que deseas buscar: ")
+                                    directorio.mostrar_informacion_contacto(nombre, rol)
                                 case '3':
-                                    directorio.mostrar_contactos_por_sueldo()
+                                    sueldo = int(input("Escribe el sueldo del contacto que deseas buscar: "))
+                                    directorio.mostrar_contactos_por_sueldo(sueldo)
                                 case "4":
-                                    directorio.mostrar_contactos_con_email()
+                                    email = input("Escribe el correo electrónico del contacto que deseas buscar: ")
+                                    directorio.buscar_contacto_email(email)
                                 case '5':
-                                    directorio.mostrar_contactos_por_carrera()
+                                    carrera = input("Escribe la carrera relacionada al contacto que deseas buscar: ")
+                                    directorio.mostrar_contactos_por_carrera(carrera)
                                 case '6':
-                                    directorio.mostrar_alumnos_o_profesores()
+                                    eleccion = int(input(
+                                        "Escribe 0 si deseas ver a los alumnos o 1 si deseas ver a los profesores: "))
+                                    directorio.mostrar_alumnos_o_profesores(eleccion)
                                 case '7':
-                                    directorio.buscar_contacto_cum()
+                                    nombre = input("Escribe el nombre")
+                                    directorio.buscar_contacto_cum(nombre)
                                 case "8":
-                                    directorio.buscar_contacto_celular()
+                                    cum = input("Escribe el cumpleaños del contacto que deseas buscar: ")
+                                    directorio.buscar_contacto_celular(cum)
                                 case 'S':
                                     print('Regresando al menu principal')
                         opcion = ''
@@ -259,11 +281,15 @@ if __name__ == "__main__":
                             opcion = menuEliminar()
                             match opcion:
                                 case '1':
-                                    directorio.eliminar_contacto()
+                                    nombre = input("Escribe el nombre del contacto que deseas eliminar: ")
+                                    directorio.eliminar_contacto(nombre)
                                 case '2':
-                                    directorio.eliminar_cel()
+                                    celular = int(
+                                        input("Escribe el número de celular del contacto que deseas eliminar: "))
+                                    directorio.eliminar_cel(celular)
                                 case '3':
-                                    directorio.eliminar_email()
+                                    email = input("Escribe el correo electrónico del contacto que deseas eliminar: ")
+                                    directorio.eliminar_email(email)
                                 case 'S':
                                     print('Regresando al menu principal')
                         opcion = ''
