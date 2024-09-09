@@ -212,13 +212,13 @@ class Directorio:
             posicion = self.buscar_indice(nombre)
             persona = self.__directorio[posicion]
             if isinstance(persona, cA.Alumno):
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                print("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
                         "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
                         "\nNum. Cuenta:\n" + str(persona.num_cuenta) + "\nCarrera:\n" + persona.carrera +
                         "\nMaterias:\n" + str(persona.materias) + "\nSemestre:\n" + str(persona.semestre))
             elif isinstance(persona, cPr.Profesor):
                 cPr.setlocale(cPr.LC_MONETARY, "en_US")
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                print("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
                         "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
                         "\nNum. Profesor:\n" + str(persona.num_profesor) + "\nTel. Oficina:\n" +
                         str(persona.tel_oficina) + "\nSueldo:\n" + cPr.currency(persona.sueldo, grouping=True) +
@@ -227,12 +227,12 @@ class Directorio:
 
             elif isinstance(persona, cC.Coordinador):
                 cC.setlocale(cC.LC_MONETARY, "en_US")
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                print("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
                         "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
                         "\nNum. Empleado:\n" + str(persona.num_empleado) + "\nTel. Oficina:\n" +
                         str(persona.tel_oficina) + "\nSueldo:\n" + cC.currency(persona.sueldo, grouping=True) +
                         "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera que coordina:\n" + persona.carrera_coordina)
-        return "No hay contactos."
+        print("No hay contactos.")
 
     # Extra: lectura/escritura de archivos CSV
     def lectura_csvs(self):
@@ -734,7 +734,7 @@ class Directorio:
                     profesores += str(contacto) + '\n'
                 if isinstance(contacto, cC.Coordinador):
                     coordinadores += str(contacto) + '\n'
-        return "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
+        print("\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
 
     # Issac
     def contiene(self, contacto) -> bool:
@@ -841,8 +841,8 @@ class Directorio:
                         profesores += str(contacto) + '\n'
                     if isinstance(contacto, cC.Coordinador):
                         coordinadores += str(contacto) + '\n'
-                return "\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
-        return "No hay contactos."
+                print("\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
+        print "No hay contactos."
 
     def buscar_contacto_cum(self, cumpleanios: str):
         """
@@ -865,8 +865,8 @@ class Directorio:
                         profesores += str(contacto) + '\n'
                     if isinstance(contacto, cC.Coordinador):
                         coordinadores += str(contacto) + '\n'
-                return "\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
-        return "No hay contactos."
+                print("\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
+        print("No hay contactos.")
 
     # Carlos
 
@@ -941,7 +941,7 @@ class Directorio:
             elif isinstance(contacto, cC.Coordinador) and contacto.carrera_coordina == carrera_particular:
                 coordinadores += str(contacto) + '\n'
 
-        return "\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
+        print("\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
 
     def mostrar_alumnos_o_profesores(self, eleccion):
         """
@@ -975,3 +975,50 @@ class Directorio:
                 print('\nNp hay profesores registrados')
         else:
             print('No es una entrada valida')
+
+    def buscar_indice_email(self, email: str) -> int:
+        """
+        Metodo auxiliar que busca el indice del arreglo de directorio, dado el nombre completo de una persona
+        :param nombre_completo: El nombre_completo a buscar en el directorio
+        :return: indice: Int - Si se encuentra en el arreglo el directorio regresa un valor >= 0
+                        Si no se encuentra en el arreglo regresa un valor < 0
+        :rtype: Int
+        """
+        for persona in self.__directorio:
+            if persona is not None and persona.email == email:
+                return int(np.where(self.__directorio == persona)[0][0])
+        return -1
+
+    def mostrar_per_email(self, email):
+        """
+        Metodo __str__ que define como mostrar una persona dentro del directorio.
+        La representa a traves de los elementos en el array.
+        :param nombre: persona a mostrar
+        :return: cadena: Str - La representacion de la persona en el directorio
+        :rtype: Str
+        """
+        if not self.esta_vacio():
+            posicion = self.buscar_indice_email(email)
+            persona = self.__directorio[posicion]
+            if isinstance(persona, cA.Alumno):
+                print("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Cuenta:\n" + str(persona.num_cuenta) + "\nCarrera:\n" + persona.carrera +
+                        "\nMaterias:\n" + str(persona.materias) + "\nSemestre:\n" + str(persona.semestre))
+            elif isinstance(persona, cPr.Profesor):
+                cPr.setlocale(cPr.LC_MONETARY, "en_US")
+                print("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Profesor:\n" + str(persona.num_profesor) + "\nTel. Oficina:\n" +
+                        str(persona.tel_oficina) + "\nSueldo:\n" + cPr.currency(persona.sueldo, grouping=True) +
+                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera donde imparte materias:\n" +
+                        persona.carrera + "\nGrupos:\n" + str(persona.grupos))
+
+            elif isinstance(persona, cC.Coordinador):
+                cC.setlocale(cC.LC_MONETARY, "en_US")
+                print("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                        "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
+                        "\nNum. Empleado:\n" + str(persona.num_empleado) + "\nTel. Oficina:\n" +
+                        str(persona.tel_oficina) + "\nSueldo:\n" + cC.currency(persona.sueldo, grouping=True) +
+                        "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera que coordina:\n" + persona.carrera_coordina)
+        print("No hay contactos.")
