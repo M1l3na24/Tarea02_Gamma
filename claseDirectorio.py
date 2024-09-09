@@ -19,12 +19,13 @@ class Directorio:
         Se construye como un directorio nuevo: vacio por default
         """
         # Crear un directorio vacio
-        self.directorio = np.empty(1, dtype=object)
-        self.numeros_cuenta = set()
-        self.numeros_profesor = set()
-        self.numeros_empleado = set()
+        self.__directorio = np.empty(1, dtype=object)
+        print('self__direcotiro',self.__directorio)
+        self.__numeros_cuenta = set()
+        self.__numeros_profesor = set()
+        self.__numeros_empleado = set()
         # num_personas es un indice que me permite saber cual es el tamaño de mi directorio actual
-        self.num_personas = 0
+        self.__num_personas = 0
 
     # Insertar datos de un nuevo contacto (alumno, profesor o coordinador).
     def insertar_nuevo_alumno(self):
@@ -36,8 +37,8 @@ class Directorio:
         while True:
             try:
                 num_cuenta = int(input('Escribe el numero de cuenta de alumno: '))
-                if num_cuenta not in self.numeros_cuenta:
-                    self.numeros_cuenta.add(num_cuenta)
+                if num_cuenta not in self.__numeros_cuenta:
+                    self.__numeros_cuenta.add(num_cuenta)
                     break
                 else:
                     print(f"El numero de cuenta {num_cuenta} ya existe, escribe otro")
@@ -63,9 +64,10 @@ class Directorio:
                 break
             except ValueError:
                 print('El semestre del alumno, tiene que ser un entero')
-        self.directorio[self.num_personas] = cA.Alumno(nombre, celular, cumpleanios, correo, num_cuenta, carrera,
-                                                       materias, semestre)
-        self.num_personas += 1
+        self.extender(self.__num_personas + 1)
+        self.__directorio[self.__num_personas] = cA.Alumno(nombre, celular, cumpleanios, correo, num_cuenta, carrera,
+                                                           materias, semestre)
+        self.__num_personas += 1
         print('Alumno agregado\n')
 
     def insertar_nuevo_profesor(self):
@@ -77,8 +79,8 @@ class Directorio:
         while True:
             try:
                 num_profesor = int(input('Escribe el numero de Profesor: '))
-                if num_profesor not in self.numeros_profesor:
-                    self.numeros_cuenta.add(num_profesor)
+                if num_profesor not in self.__numeros_profesor:
+                    self.__numeros_cuenta.add(num_profesor)
                     break
                 else:
                     print(f"El numero de profesor {num_profesor} ya existe, escribe otro")
@@ -112,10 +114,23 @@ class Directorio:
                 break
             except ValueError:
                 print('El sueldo del profesor, tiene que ser un entero')
-        self.directorio[self.num_personas] = cPr.Profesor(nombre, celular, cumpleanios, correo, num_profesor,
-                                                          tel_oficina, sueldo, dept, carrera, grupos)
-        self.num_personas += 1
+        self.extender(self.__num_personas + 1)
+        self.__directorio[self.__num_personas] = cPr.Profesor(nombre, celular, cumpleanios, correo, num_profesor,
+                                                              tel_oficina, sueldo, dept, carrera, grupos)
+        self.__num_personas += 1
         print('Profesor agregado\n')
+
+    def extender(self, nuevo_tamanio):
+        """
+        Este metodo permitira incrementar o reducir el tamanio del directorio.
+        :param nuevo_tamanio: tamanio al que se desea expandir
+        :return: el arreglo expandido o encogidocon un espacio vacio
+        """
+        if nuevo_tamanio > self.__num_personas-1:
+            self.__directorio = np.pad(self.__directorio, (0, nuevo_tamanio - self.__num_personas + 1), mode='constant')
+            return self.__directorio
+        elif nuevo_tamanio < self.__num_personas-1:
+            return self.__directorio == self.__directorio[:nuevo_tamanio]
 
     def insertar_nuevo_coordinador(self):
         """
@@ -126,8 +141,8 @@ class Directorio:
         while True:
             try:
                 num_empleado = int(input('Escribe el numero de Empleado: '))
-                if num_empleado not in self.numeros_empleado:
-                    self.numeros_cuenta.add(num_empleado)
+                if num_empleado not in self.__numeros_empleado:
+                    self.__numeros_cuenta.add(num_empleado)
                     break
                 else:
                     print(f"El numero de empleado {num_empleado} ya existe, escribe otro")
@@ -158,9 +173,10 @@ class Directorio:
                 break
             except ValueError:
                 print('El sueldo del Coordinador, tiene que ser un entero')
-        self.directorio[self.num_personas] = cC.Coordinador(nombre, celular, cumpleanios, correo, num_empleado,
-                                                            tel_oficina, sueldo, dept, carrera_coor)
-        self.num_personas += 1
+        self.extender(self.__num_personas + 1)
+        self.__directorio[self.__num_personas] = cC.Coordinador(nombre, celular, cumpleanios, correo, num_empleado,
+                                                                tel_oficina, sueldo, dept, carrera_coor)
+        self.__num_personas += 1
         print('Coordinador agregado\n')
 
     def buscar_indice(self, nombre_completo) -> int:
@@ -171,9 +187,9 @@ class Directorio:
                         Si no se encuentra en el arreglo regresa un valor < 0
         :rtype: Int
         """
-        for persona in self.directorio:
+        for persona in self.__directorio:
             if persona is not None and persona.nombre_completo == nombre_completo:
-                return int(np.where(self.directorio == persona)[0][0])
+                return int(np.where(self.__directorio == persona)[0][0])
         return -1
 
     def esta_vacio(self) -> bool:
@@ -182,7 +198,7 @@ class Directorio:
         :return: True - Si esta vacio el arreglo de personas
                  False - Si hay algun elemento en el arreglo de personas
         """
-        return not self.directorio.any()
+        return not self.__directorio.any()
 
     def mostrar_persona(self, nombre):
         """
@@ -194,7 +210,7 @@ class Directorio:
         """
         if not self.esta_vacio():
             posicion = self.buscar_indice(nombre)
-            persona = self.directorio[posicion]
+            persona = self.__directorio[posicion]
             if isinstance(persona, cA.Alumno):
                 return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
                         "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
@@ -233,23 +249,26 @@ class Directorio:
                 for linea in lineas:
                     linea = linea.split(",")
                     if linea[0] == 'A':
-                        self.directorio[self.num_personas] = cA.Alumno(linea[1], int(linea[2]), linea[3], linea[4],
-                                                                       int(linea[5]), linea[6], list(linea[7]),
-                                                                       int(linea[8]))
-                        self.numeros_cuenta.add(int(linea[5]))
-                        self.num_personas += 1
+                        self.__directorio[self.__num_personas] = cA.Alumno(linea[1], int(linea[2]), linea[3], linea[4],
+                                                                           int(linea[5]), linea[6], list(linea[7]),
+                                                                           int(linea[8]))
+                        self.__numeros_cuenta.add(int(linea[5]))
+                        self.__num_personas += 1
                     elif linea[0] == 'P':
-                        self.directorio[self.num_personas] = cPr.Profesor(linea[1], int(linea[2]), linea[3], linea[4],
-                                                                          int(linea[5]), int(linea[6]), int(linea[7]),
-                                                                          linea[8], linea[9], list(linea[10]))
-                        self.numeros_cuenta.add(int(linea[5]))
-                        self.num_personas += 1
+                        self.__directorio[self.__num_personas] = cPr.Profesor(linea[1], int(linea[2]), linea[3],
+                                                                              linea[4], int(linea[5]), int(linea[6]),
+                                                                              int(linea[7]),
+                                                                              linea[8], linea[9], list(linea[10]))
+                        self.__numeros_cuenta.add(int(linea[5]))
+                        self.__num_personas += 1
                     elif linea[0] == 'C':
-                        self.directorio[self.num_personas] = cC.Coordinador(linea[1], int(linea[2]), linea[3], linea[4],
-                                                                            int(linea[5]), int(linea[6]), int(linea[7]),
-                                                                            linea[8], linea[9])
-                        self.numeros_cuenta.add(int(linea[5]))
-                        self.num_personas += 1
+                        self.__directorio[self.__num_personas] = cC.Coordinador(linea[1], int(linea[2]), linea[3],
+                                                                                linea[4],
+                                                                                int(linea[5]), int(linea[6]),
+                                                                                int(linea[7]),
+                                                                                linea[8], linea[9])
+                        self.__numeros_cuenta.add(int(linea[5]))
+                        self.__num_personas += 1
                 print("Archivo cargado correctamente")
                 f.close()
                 break
@@ -264,7 +283,7 @@ class Directorio:
         nombre = input('Escribe el nombre del archivo con terminación csv'
                        ', con el que deseas guardar: ')
         f = open(nombre, 'w')
-        for persona in self.directorio:
+        for persona in self.__directorio:
             if persona is not None:
                 per = ''
                 for atributo in persona:
@@ -286,20 +305,20 @@ class Directorio:
         :return: La posicion correcta del pivote
         :rtype: int
         """
-        pivote = self.directorio[inicio]
+        pivote = self.__directorio[inicio]
         left = inicio + 1
         right = fin
         while True:
-            while left <= right and comparador(self.directorio[left], pivote) <= 0:
+            while left <= right and comparador(self.__directorio[left], pivote) <= 0:
                 left += 1
-            while comparador(self.directorio[right], pivote) > 0 and right >= left:
+            while comparador(self.__directorio[right], pivote) > 0 and right >= left:
                 right -= 1
             if right < left:
                 break
             else:  # Intercambiamos los datos que no cumplieron las condiciones
-                self.directorio[left], self.directorio[right] = self.directorio[right], self.directorio[left]
+                self.__directorio[left], self.__directorio[right] = self.__directorio[right], self.__directorio[left]
         # Movemos el pivote a la posición correcta
-        self.directorio[inicio], self.directorio[right] = self.directorio[right], self.directorio[inicio]
+        self.__directorio[inicio], self.__directorio[right] = self.__directorio[right], self.__directorio[inicio]
         return right  # Devolvemos la posición correcta del pivote
 
     # Quick sort
@@ -315,7 +334,7 @@ class Directorio:
             posicion_part = self.__particion(inicio, fin, comparador)
             self.ordenar_directorio(inicio, posicion_part - 1, comparador)
             self.ordenar_directorio(posicion_part + 1, fin, comparador)
-        return self.directorio
+        return self.__directorio
 
 # Tipos de comparadores: Ordenar alfabeticamente
     def __compare_strings(self, str1: str, str2: str) -> int:
@@ -352,8 +371,8 @@ class Directorio:
         :param rol - tipo de objeto
         :return un string con la informacion completa del contacto con esas caracteristicas.
         """
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
-        for contacto in self.directorio:
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
+        for contacto in self.__directorio:
             if contacto.nombre_completo == nombre and isinstance(contacto, rol):
                 return contacto
         print('No existe un contacto con esas caracteristicas')
@@ -362,8 +381,8 @@ class Directorio:
         """
         Elimina los datos de un contacto a partir del nombre.
         """
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
-        for persona in self.directorio:
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
+        for persona in self.__directorio:
             if persona and persona.nomnre_completo == nombre:
                 self.eliminar(persona)
                 print(f"El contacto con el nombre: '{nombre}' ha sido eliminado.")
@@ -455,7 +474,7 @@ class Directorio:
         if indice == -1:
             print(f"No se encuentra el alumno con nombre completo {nom_completo}")
         else:
-            alumno = self.directorio[indice]
+            alumno = self.__directorio[indice]
             if isinstance(alumno, cA.Alumno) and not isinstance(alumno, cPr.Profesor):
                 print(alumno)
                 opcion = ''
@@ -494,9 +513,9 @@ class Directorio:
                                     break
                                 except ValueError:
                                     print('El numero de cuenta del alumno, tiene que ser un entero')
-                            self.numeros_cuenta.remove(alumno.num_cuenta)
+                            self.__numeros_cuenta.remove(alumno.num_cuenta)
                             alumno.num_cuenta = nuevonumcuenta
-                            self.numeros_cuenta.add(alumno.num_cuenta)
+                            self.__numeros_cuenta.add(alumno.num_cuenta)
                             print('Numero de Cuenta Actualizado \n')
                             opcion = ''
 
@@ -533,7 +552,7 @@ class Directorio:
         if indice == -1:
             print(f"No se encuentra el profesor con nombre completo {nomcompleto}")
         else:
-            profesor = self.directorio[indice]
+            profesor = self.__directorio[indice]
             if isinstance(profesor, cPr.Profesor) and not isinstance(profesor, cC.Coordinador):
                 print(profesor)
                 opcion = ''
@@ -572,9 +591,9 @@ class Directorio:
                                     break
                                 except ValueError:
                                     print('El numero de cuenta del profesor, tiene que ser un entero')
-                            self.numeros_profesor.remove(profesor.num_cuenta)
+                            self.__numeros_profesor.remove(profesor.num_cuenta)
                             profesor.num_cuenta = nuevonumprofesor
-                            self.numeros_profesor.add(profesor.num_cuenta)
+                            self.__numeros_profesor.add(profesor.num_cuenta)
                             print('Numero de Profesor Actualizado \n')
                             opcion = ''
 
@@ -623,7 +642,7 @@ class Directorio:
         if indice == -1:
             print(f"No se encuentra el coordinador con nombre completo {nomcompleto}")
         else:
-            coordinador = self.directorio[indice]
+            coordinador = self.__directorio[indice]
             if isinstance(coordinador, cC.Coordinador) and not isinstance(coordinador, cPr.Profesor):
                 print(coordinador)
                 opcion = ''
@@ -663,9 +682,9 @@ class Directorio:
                                     break
                                 except ValueError:
                                     print('El numero de empleado del coordinador, tiene que ser un entero')
-                            self.numeros_empleado.remove(coordinador.num_empleado)
+                            self.__numeros_empleado.remove(coordinador.num_empleado)
                             coordinador.num_empleado = nuevonumempleado
-                            self.numeros_empleado.add(coordinador.num_empleado)
+                            self.__numeros_empleado.add(coordinador.num_empleado)
                             print('Numero de Empleado Actualizado \n')
                             opcion = ''
 
@@ -706,10 +725,10 @@ class Directorio:
         :param sueldo: int - el sueldo especifico que busco
         :return un string ordenado que divide profesores y coordinadores con ese sueldo especifico.
         """
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
         profesores = ''
         coordinadores = ''
-        for contacto in self.directorio:
+        for contacto in self.__directorio:
             if contacto is not None and contacto.sueldo == sueldo:
                 if isinstance(contacto, cPr.Profesor):
                     profesores += str(contacto) + '\n'
@@ -724,8 +743,8 @@ class Directorio:
         :param contacto: El contacto a buscar
         :return: True si está contenido, False en caso contrario
         """
-        for i in range(self.num_personas):
-            if self.directorio[i] == contacto:  # Lo encontro
+        for i in range(self.__num_personas):
+            if self.__directorio[i] == contacto:  # Lo encontro
                 return True
         return False  # No lo encontro
 
@@ -737,13 +756,13 @@ class Directorio:
         # Hay que asegurarnos que el arreglo no este vacío y el elemento exista
         if not self.esta_vacio() and self.contiene(contacto):
             encontro = False
-            for i in range(self.num_personas):
-                if self.directorio[i] == contacto:  # Lo encontro
-                    if i == self.num_personas - 1:  # El elemento esta al final
-                        self.num_personas -= 1  # Dejamos innaccesible el elemento
+            for i in range(self.__num_personas):
+                if self.__directorio[i] == contacto:  # Lo encontro
+                    if i == self.__num_personas - 1:  # El elemento esta al final
+                        self.__num_personas -= 1  # Dejamos innaccesible el elemento
                     else:  # El elemento no esta al final
-                        self.num_personas -= 1
-                        self.directorio[i] = self.directorio[self.directorio]
+                        self.__num_personas -= 1
+                        self.__directorio[i] = self.__directorio[self.__directorio]
                     print(f"El contacto {contacto} fue eliminado!\n")
                     encontro = True
                     break  # Ya no es necesario seguir buscando
@@ -754,8 +773,8 @@ class Directorio:
         """
         Elimina los datos de un contacto a partir del numero de celular.
         """
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
-        for persona in self.directorio:
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
+        for persona in self.__directorio:
             if persona and persona.celular == celular:
                 self.eliminar(persona)
                 print(f"El contacto con el numero de celular: '{celular}' ha sido eliminado.")
@@ -766,8 +785,8 @@ class Directorio:
         """
         Elimina los datos de un contacto a partir del correo electronico.
         """
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
-        for persona in self.directorio:
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
+        for persona in self.__directorio:
             if persona and persona.email == correo:
                 self.eliminar(persona)
                 print(f"El contacto con el correo electrónico: '{correo}' ha sido eliminado.")
@@ -782,9 +801,9 @@ class Directorio:
                  Si no se encuentra en el arreglo, retorna un valor < 0.
         :rtype: int
         """
-        for persona in self.directorio:
+        for persona in self.__directorio:
             if persona is not None and persona.fecha_cumpleanios == cumpleanios:
-                return int(np.where(self.directorio == persona)[0][0])
+                return int(np.where(self.__directorio == persona)[0][0])
         return -1
 
     def buscar_indice_cel(self, celular) -> int:
@@ -796,9 +815,9 @@ class Directorio:
                  Si no se encuentra en el arreglo, retorna un valor < 0.
         :rtype: int
         """
-        for persona in self.directorio:
+        for persona in self.__directorio:
             if persona is not None and persona.celular == celular:
-                return int(np.where(self.directorio == persona)[0][0])
+                return int(np.where(self.__directorio == persona)[0][0])
         return -1
 
     def buscar_contacto_celular(self, celular: int):
@@ -809,12 +828,12 @@ class Directorio:
         :return: cadena: Str - La representacion de la persona en el directorio
         :rtype: Str
         """
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
         if not self.esta_vacio():
             alumnos = ''
             profesores = ''
             coordinadores = ''
-            for contacto in self.directorio:
+            for contacto in self.__directorio:
                 if contacto is not None and contacto.celular == celular:
                     if isinstance(contacto, cA.Alumno):
                         alumnos += str(contacto) + '\n'
@@ -825,7 +844,7 @@ class Directorio:
                 return "\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
         return "No hay contactos."
 
-    def buscar_contacto_cum(self, cumpleanios: int):
+    def buscar_contacto_cum(self, cumpleanios: str):
         """
         Metodo __str__ que define como mostrar una persona dentro del directorio a partir de su cumpleanios.
         La representa a traves de los elementos en el directorio.
@@ -833,12 +852,12 @@ class Directorio:
         :return: cadena: Str - La representacion de la persona en el directorio
         :rtype: Str
         """
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
         if not self.esta_vacio():
             alumnos = ''
             profesores = ''
             coordinadores = ''
-            for contacto in self.directorio:
+            for contacto in self.__directorio:
                 if contacto is not None and contacto.cumpleanios == cumpleanios:
                     if isinstance(contacto, cA.Alumno):
                         alumnos += str(contacto) + '\n'
@@ -857,17 +876,17 @@ class Directorio:
         :return: Una cadena de caracteres que incluiran la informacion de contacto.
         """
         cadena = ''
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
         alumnos = []
         profesores = []
         coordinadores = []
-        for i in range(self.num_personas):
-            if isinstance(self.directorio[i], cA.Alumno):
-                alumnos.append(self.directorio[i])
-            elif isinstance(self.directorio[i], cPr.Profesor):
-                profesores.append(self.directorio[i])
-            elif isinstance(self.directorio[i], cC.Coordinador):
-                coordinadores.append(self.directorio[i])
+        for i in range(self.__num_personas):
+            if isinstance(self.__directorio[i], cA.Alumno):
+                alumnos.append(self.__directorio[i])
+            elif isinstance(self.__directorio[i], cPr.Profesor):
+                profesores.append(self.__directorio[i])
+            elif isinstance(self.__directorio[i], cC.Coordinador):
+                coordinadores.append(self.__directorio[i])
         if alumnos:
             cadena += '\nAlumnos: '
             for alumno in alumnos:
@@ -896,7 +915,7 @@ class Directorio:
         Obs: por como fue definido la clase Persona, los objetos persona
         tienen un email valido.
         """
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
         copia = copy.deepcopy(self)
         copia.eliminar_email(None)
         copia.eliminar_email('')
@@ -910,11 +929,11 @@ class Directorio:
         :param carrera_particular: str -la carrera especifica que busco
         :return un string ordenado que divide alumnos, profesores y coordinadores con esa carrera especifica.
         """
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
         alumnos = ''
         profesores = ''
         coordinadores = ''
-        for contacto in self.directorio:
+        for contacto in self.__directorio:
             if isinstance(contacto, cA.Alumno) and contacto.carrera == carrera_particular:
                 alumnos += str(contacto) + '\n'
             elif isinstance(contacto, cPr.Profesor) and contacto.carrera == carrera_particular:
@@ -930,12 +949,12 @@ class Directorio:
         Esto segun la eleccion del usuario
         :param eleccion: 0 si alumnos, 1 si maestros
         """
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
         if eleccion == 0:
             alumnos = []
-            for i in range(self.num_personas):
-                if isinstance(self.directorio[i], cA.Alumno):
-                    alumnos.append(self.directorio[i])
+            for i in range(self.__num_personas):
+                if isinstance(self.__directorio[i], cA.Alumno):
+                    alumnos.append(self.__directorio[i])
             if alumnos:
                 print('\nAlumnos registrados:')
                 for alumno in alumnos:
@@ -945,7 +964,7 @@ class Directorio:
 
         elif eleccion == 1:
             profesores = []
-            for persona in self.directorio:
+            for persona in self.__directorio:
                 if isinstance(persona, cPr.Profesor):
                     profesores.append(persona)
             if profesores:
