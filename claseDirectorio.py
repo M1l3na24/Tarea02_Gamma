@@ -196,13 +196,13 @@ class Directorio:
             posicion = self.buscar_indice(nombre)
             persona = self.directorio[posicion]
             if isinstance(persona, cA.Alumno):
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                print ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
                         "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
                         "\nNum. Cuenta:\n" + str(persona.num_cuenta) + "\nCarrera:\n" + persona.carrera +
                         "\nMaterias:\n" + str(persona.materias) + "\nSemestre:\n" + str(persona.semestre))
             elif isinstance(persona, cPr.Profesor):
                 cPr.setlocale(cPr.LC_MONETARY, "en_US")
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                print ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
                         "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
                         "\nNum. Profesor:\n" + str(persona.num_profesor) + "\nTel. Oficina:\n" +
                         str(persona.tel_oficina) + "\nSueldo:\n" + cPr.currency(persona.sueldo, grouping=True) +
@@ -211,12 +211,12 @@ class Directorio:
 
             elif isinstance(persona, cC.Coordinador):
                 cC.setlocale(cC.LC_MONETARY, "en_US")
-                return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
+                print ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
                         "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
                         "\nNum. Empleado:\n" + str(persona.num_empleado) + "\nTel. Oficina:\n" +
                         str(persona.tel_oficina) + "\nSueldo:\n" + cC.currency(persona.sueldo, grouping=True) +
                         "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera que coordina:\n" + persona.carrera_coordina)
-        return "No hay contactos."
+        print("No hay contactos.")
 
     # Extra: lectura/escritura de archivos CSV
     def lectura_csvs(self):
@@ -277,43 +277,55 @@ class Directorio:
 
     def __particion(self, inicio, fin, comparador) -> int:
         """
-        Esta funcion organiza los elementos del directorio de manera que todos los elementos
-        menores o iguales al pivote estan a la izquierda y todos los elementos mayores estan
-        a la derecha. El pivote se coloca en su posicion correcta.
+        Organiza los elementos del directorio de manera que todos los elementos
+        menores o iguales al pivote están a la izquierda y todos los elementos mayores están
+        a la derecha. El pivote se coloca en su posición correcta.
+
         :param inicio: La posición inicial
-        :param fin: La posicion final
+        :param fin: La posición final
         :param comparador: El comparador con el que se desea hacer el ordenamiento
-        :return: La posicion correcta del pivote
+        :return: La posición correcta del pivote
         :rtype: int
         """
+        # Selecciona el primer elemento como pivote
         pivote = self.directorio[inicio]
         left = inicio + 1
         right = fin
+
+        # Bucle principal de partición
         while True:
-            while left <= right and comparador(self.directorio[left], pivote) <= 0:
+            # Avanza el puntero izquierdo mientras el elemento sea menor o igual al pivote
+            while left <= right and left < len(self.directorio) and comparador(self.directorio[left], pivote) <= 0:
                 left += 1
-            while comparador(self.directorio[right], pivote) > 0 and right >= left:
+            # Retrocede el puntero derecho mientras el elemento sea mayor al pivote
+            while right >= left and right >= 0 and comparador(self.directorio[right], pivote) > 0:
                 right -= 1
+            # Verifica si los punteros se cruzaron
             if right < left:
                 break
-            else:  # Intercambiamos los datos que no cumplieron las condiciones
+            else:
+                # Intercambia elementos que no cumplieron las condiciones
                 self.directorio[left], self.directorio[right] = self.directorio[right], self.directorio[left]
-        # Movemos el pivote a la posición correcta
-        self.directorio[inicio], self.directorio[right] = self.directorio[right], self.directorio[inicio]
-        return right  # Devolvemos la posición correcta del pivote
 
-    # Quick sort
+        # Coloca el pivote en su posición correcta
+        self.directorio[inicio], self.directorio[right] = self.directorio[right], self.directorio[inicio]
+        return right  # Devuelve la posición correcta del pivote
+
     def ordenar_directorio(self, inicio, fin, comparador):
         """
-        Esta funcion aplica recursivamente el algoritmo Quick Sort a los subarreglos definidos por el pivote.
-        :param inicio: La posicion inicial
-        :param fin: La posicion final
+        Aplica recursivamente el algoritmo Quick Sort a los subarreglos definidos por el pivote.
+
+        :param inicio: La posición inicial
+        :param fin: La posición final
         :param comparador: El comparador con el que se desea hacer el ordenamiento
-        :return: Arreglo de contactos ordenado
+        :return: Lista de contactos ordenada
         """
-        if inicio < fin:
+        if inicio < fin and inicio >= 0 and fin < len(self.directorio):
+            # Obtiene la posición del pivote después de la partición
             posicion_part = self.__particion(inicio, fin, comparador)
+            # Ordena el subarreglo izquierdo
             self.ordenar_directorio(inicio, posicion_part - 1, comparador)
+            # Ordena el subarreglo derecho
             self.ordenar_directorio(posicion_part + 1, fin, comparador)
         return self.directorio
 
@@ -706,16 +718,21 @@ class Directorio:
         :param sueldo: int - el sueldo especifico que busco
         :return un string ordenado que divide profesores y coordinadores con ese sueldo especifico.
         """
-        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
-        profesores = ''
-        coordinadores = ''
-        for contacto in self.directorio:
-            if contacto is not None and contacto.sueldo == sueldo:
-                if isinstance(contacto, cPr.Profesor):
-                    profesores += str(contacto) + '\n'
-                if isinstance(contacto, cC.Coordinador):
-                    coordinadores += str(contacto) + '\n'
-        return "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
+        if isinstance(sueldo, (int, float)) and sueldo >= 0:
+            # Ordena el directorio antes de mostrar los contactos
+            self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+            profesores = ''
+            coordinadores = ''
+            for contacto in self.directorio:
+                if contacto is not None and contacto.sueldo == sueldo:
+                    if isinstance(contacto, cPr.Profesor):
+                        profesores += str(contacto) + '\n'
+                    elif isinstance(contacto, cC.Coordinador):
+                        coordinadores += str(contacto) + '\n'
+            # Retorna la información agrupada
+            return f"\nPROFESORES:\n{profesores}\nCOORDINADORES:\n{coordinadores}"
+        else:
+            print("El sueldo debe ser un número real positivo")
 
     # Issac
     def contiene(self, contacto) -> bool:
@@ -772,6 +789,7 @@ class Directorio:
                 self.eliminar(persona)
                 print(f"El contacto con el correo electrónico: '{correo}' ha sido eliminado.")
                 return
+        print(f"No se encontro contacto con el correo electrónico: {correo}")
 
     def buscar_indice_cum(self, cumpleanios) -> int:
         """
@@ -823,7 +841,7 @@ class Directorio:
                     if isinstance(contacto, cC.Coordinador):
                         coordinadores += str(contacto) + '\n'
                 return "\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
-        return "No hay contactos."
+        print("No hay contactos.")
 
     def buscar_contacto_cum(self, cumpleanios: int):
         """
@@ -847,7 +865,7 @@ class Directorio:
                     if isinstance(contacto, cC.Coordinador):
                         coordinadores += str(contacto) + '\n'
                 return "\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
-        return "No hay contactos."
+        print("No hay contactos.")
 
     # Carlos
 
@@ -890,7 +908,7 @@ class Directorio:
             cadena += '\n\nNo hay coordinadores registrados'
         return cadena
 
-    def mostrar_contactos_con_email(self):
+    # def mostrar_contactos_con_email(self):
         """
         Muestra los contactos por categoria y ordenados
         Obs: por como fue definido la clase Persona, los objetos persona
@@ -901,6 +919,35 @@ class Directorio:
         copia.eliminar_email(None)
         copia.eliminar_email('')
         print(copia)
+    def buscar_contacto_email(self, email:str):
+        """
+        Metodo __str__ que define como mostrar una persona dentro del directorio.
+        La representa a traves de los elementos en el array.
+        :param celular:int - numero de celular del contacto
+        :return: cadena: Str - La representacion de la persona en el directorio
+        :rtype: Str
+        """
+        self.ordenar_directorio(0, self.num_personas, self.nombre_comparador)
+        if not self.esta_vacio():
+            alumnos = ''
+            profesores = ''
+            coordinadores = ""
+            # Itera sobre cada contacto en el directorio
+            for contacto in self.directorio:
+                if contacto is not None and contacto.email == email:
+                    if isinstance(contacto, cA.Alumno):
+                        alumnos += str(contacto) + '\n'
+                    elif isinstance(contacto, cPr.Profesor):
+                        profesores += str(contacto) + '\n'
+                    elif isinstance(contacto, cC.Coordinador):
+                        coordinadores += str(contacto) + '\n'
+            # Verifica si se encontró algún contacto
+            if alumnos or profesores or coordinadores:
+                return f"\nALUMNOS:\n{alumnos}\nPROFESORES:\n{profesores}\nCOORDINADORES:\n{coordinadores}"
+            else:
+                return "No se encontraron contactos con ese correo electrónico."
+        else:
+            return "No hay contactos en el directorio."
 
     def mostrar_contactos_por_carrera(self, carrera_particular: str):
         """
