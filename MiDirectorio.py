@@ -26,7 +26,7 @@ def menu_principal() -> str:
             continue
         else:
             break
-    return opcion
+    return opcionn
 
 
 def menu_insertar_datos() -> str:
@@ -46,7 +46,7 @@ def menu_insertar_datos() -> str:
             continue
         else:
             break
-    return opcion
+    return opcionn
 
 
 def menu_actualizar():
@@ -67,7 +67,7 @@ def menu_actualizar():
             continue
         else:
             break
-    return opcion
+    return opcionn
 
 
 def menu_eliminar():
@@ -88,7 +88,7 @@ def menu_eliminar():
             continue
         else:
             break
-    return opcion
+    return opcionn
 
 
 def menu_mostrar_info():
@@ -113,7 +113,7 @@ def menu_mostrar_info():
             continue
         else:
             break
-    return opcion
+    return opcionn
 
 
 if __name__ == "__main__":
@@ -122,28 +122,28 @@ if __name__ == "__main__":
     print(f'Ya se creo el directorio vacio')
 
     while True:
-        opcion = input('Que deseas hacer:\n'
+        opcionn = input('Que deseas hacer:\n'
                        '1. Cargar información del directorio\n'
                        '2. Crear información nueva del directorio\n'
                        'S. Salir \n').upper()
-        if opcion not in '1,2,S' or len(opcion) != 1:
+        if opcionn not in '1,2,S' or len(opcionn) != 1:
             print('Opcion incorrecta')
             continue
         else:
             break
-    match opcion:
+    match opcionn:
         case '1':
             print('Leer un archivo csv creara un directorio nuevo con la capacidad necesaria que dependera del csv.')
             directorio.lectura_csvs()
             print(directorio)
-            opcion = ''
-            while opcion != 'S':
-                opcion = menu_principal()
-                match opcion:
+            opcionn = ''
+            while opcionn != 'S':
+                opcionn = menu_principal()
+                match opcionn:
                     case "1":
-                        while opcion != 'S':
-                            opcion = menu_insertar_datos()
-                            match opcion:
+                        while opcionn != 'S':
+                            opcionn = menu_insertar_datos()
+                            match opcionn:
                                 case '1':
                                     directorio.insertar_nuevo_alumno()
                                 case '2':
@@ -152,11 +152,11 @@ if __name__ == "__main__":
                                     directorio.insertar_nuevo_coordinador()
                                 case 'S':
                                     print('Regresando al menu principal')
-                        opcion = " "
+                        opcionn = " "
                     case '2':
-                        while opcion != 'S':
-                            opcion = menu_mostrar_info()
-                            match opcion:
+                        while opcionn != 'S':
+                            opcionn = menu_mostrar_info()
+                            match opcionn:
                                 case '1':
                                     nombre = input("Escribe el nombre del contacto que deseas buscar: ")
                                     directorio.mostrar_persona(nombre)
@@ -185,11 +185,11 @@ if __name__ == "__main__":
                                     directorio.buscar_contacto_celular(cum)
                                 case 'S':
                                     print('Regresando al menu principal')
-                        opcion = ''
+                        opcionn = ''
                     case '3':
-                        while opcion != 'S':
-                            opcion = menu_eliminar()
-                            match opcion:
+                        while opcionn != 'S':
+                            opcionn = menu_eliminar()
+                            match opcionn:
                                 case '1':
                                     nombre = input("Escribe el nombre del contacto que deseas eliminar: ")
                                     directorio.eliminar_contacto(nombre)
@@ -202,11 +202,11 @@ if __name__ == "__main__":
                                     directorio.eliminar_email(email)
                                 case 'S':
                                     print('Regresando al menu principal')
-                        opcion = ''
+                        opcionn = ''
                     case '4':
-                        while opcion != 'S':
-                            opcion = menu_actualizar()
-                            match opcion:
+                        while opcionn != 'S':
+                            opcionn = menu_actualizar()
+                            match opcionn:
                                 case '1':
                                     directorio.actualizar_alumno()
                                 case '2':
@@ -215,19 +215,19 @@ if __name__ == "__main__":
                                     directorio.actualizar_coordinador()
                                 case 'S':
                                     print('Regresando al menu principal')
-                        opcion = ''
+                        opcionn = ''
                     case 'S':
                         # dir.guardar_Archivo() no tenemos este metodo
                         print("Hasta luego")
         case '2':
-            opcion = ''
-            while opcion != 'S':
-                opcion = menu_principal()
-                match opcion:
+            opcionn = ''
+            while opcionn != 'S':
+                opcionn = menu_principal()
+                match opcionn:
                     case "1":
-                        while opcion != 'S':
-                            opcion = menu_insertar_datos()
-                            match opcion:
+                        while opcionn != 'S':
+                            opcionn = menu_insertar_datos()
+                            match opcionn:
                                 case '1':
                                     directorio.insertar_nuevo_alumno()
                                 case '2':
@@ -236,11 +236,11 @@ if __name__ == "__main__":
                                     directorio.insertar_nuevo_coordinador()
                                 case 'S':
                                     print('Regresando al menu principal')
-                        opcion = " "
+                        opcionn = " "
                     case '2':
-                        while opcion != 'S':
-                            opcion = menu_mostrar_info()
-                            match opcion:
+                        while opcionn != 'S':
+                            opcionn = menu_mostrar_info()
+                            match opcionn:
                                 case '1':
                                     nombre = input("Escribe el nombre del contacto que deseas buscar: ")
                                     directorio.mostrar_persona(nombre)
@@ -269,11 +269,11 @@ if __name__ == "__main__":
                                     directorio.buscar_contacto_celular(cum)
                                 case 'S':
                                     print('Regresando al menu principal')
-                        opcion = ''
+                        opcionn = ''
                     case '3':
-                        while opcion != 'S':
-                            opcion = menu_eliminar()
-                            match opcion:
+                        while opcionn != 'S':
+                            opcionn = menu_eliminar()
+                            match opcionn:
                                 case '1':
                                     nombre = input("Escribe el nombre del contacto que deseas eliminar: ")
                                     directorio.eliminar_contacto(nombre)
@@ -286,11 +286,11 @@ if __name__ == "__main__":
                                     directorio.eliminar_email(email)
                                 case 'S':
                                     print('Regresando al menu principal')
-                        opcion = ''
+                        opcionn = ''
                     case '4':
-                        while opcion != 'S':
-                            opcion = menu_actualizar()
-                            match opcion:
+                        while opcionn != 'S':
+                            opcionn = menu_actualizar()
+                            match opcionn:
                                 case '1':
                                     directorio.actualizar_alumno()
                                 case '2':
@@ -299,7 +299,7 @@ if __name__ == "__main__":
                                     directorio.actualizar_coordinador()
                                 case 'S':
                                     print('Regresando al menu principal')
-                        opcion = ''
+                        opcionn2 = ''
                     case 'S':
                         print("Hasta luego")
         case 'S':
