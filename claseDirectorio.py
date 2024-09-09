@@ -529,7 +529,7 @@ class Directorio:
                         case "6":
                             nueva_carrera = input('Escribe la nueva carrera del alumno: ')
                             alumno.__carrera = nueva_carrera
-                            print('Carrera Actualizada \n')
+                            print('Carrera  Actualizada \n')
                             opcion = ''
 
                         case "7":
