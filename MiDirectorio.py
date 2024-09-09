@@ -51,7 +51,7 @@ def menu_insertar_datos() -> str:
 
 def menu_buscar() -> str:
     """
-    Metodo auxiliar que despliega las opciones que podemos realizar al insertar los datos de los contactos
+    Metodo auxiliar que despliega las opciones que podemos realizar al buscar los contactos 
     :return: opcion: Str - La opcion deseada a realizar
     :rtype: Str
     """
