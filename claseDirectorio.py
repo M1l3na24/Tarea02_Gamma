@@ -289,7 +289,7 @@ class Directorio:
         """
         # Selecciona el primer elemento como pivote
         pivote = self.directorio[inicio]
-        left = inicio + 1
+        left = inicio 
         right = fin
 
         # Bucle principal de partición
