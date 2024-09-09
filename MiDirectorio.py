@@ -57,11 +57,10 @@ def menu_buscar() -> str:
     """
     while True:
         opcionn = input('Que deseas hacer:\n'
-                        '1. Agregar Alumno\n'
-                        '2. Agregar Profesor\n'
-                        '3. Agregar Coordinador\n'
+                        '1. Buscar por fecha de cumpleaños\n'
+                        '2. Buscar por número de celular\n'
                         'S. Salir \n').upper()
-        if opcionn not in '1,2,3,S' or len(opcionn) != 1:
+        if opcionn not in '1,2,S' or len(opcionn) != 1:
             print('Opcion incorrecta')
             continue
         else:
