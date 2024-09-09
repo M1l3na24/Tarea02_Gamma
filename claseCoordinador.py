@@ -13,7 +13,7 @@ class Coordinador(cP.Persona):
     """
 
     def __init__(self, nombre_completo: str, celular: int, fecha_cumpleanios: str, email: str, num_empleado: int,
-                 tel_oficina: int, sueldo: int, dept_ads: str, carrera_coordina: str):
+                 tel_oficina: int, sueldo: float, dept_ads: str, carrera_coordina: str):
         """
         Constructor para un Coordinador, ademas de los datos de una Persona, recibe el numero de empleado,
         telefono de oficina, sueldo, departamento de adscripcion y carrera que coordina.

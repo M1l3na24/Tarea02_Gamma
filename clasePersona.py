@@ -120,7 +120,7 @@ class Persona:
         return ("Persona:: {} {} | Celular: {} | "
                 "Fecha cumpleanios: {} | Email: {}").format(self.__nombre_completo,
                                                             self.__celular,
-                                                            self.__fecha_cumpleanios.strftime("%d/%m/%Y"),
+                                                            self.__fecha_cumpleanios,
                                                             self.__celular,
                                                             self.__email)
 
@@ -162,3 +162,28 @@ class Persona:
         """
         if isinstance(otra, Persona):
             return self.__llave() == otra.__llave()
+
+    def __lt__(self, otra):
+        """
+        Metodo que permite definir el criterio de menor igual para dos objetos
+        a partir de su nombre completo.
+        :param otra: La Persona con la que se va a realizar la comparacion
+        :return: True si la persona self es menor a la otra persona, False en caso contrario
+        :rtype: bool
+        """
+        if isinstance(otra, Persona):
+            return self.__nombre_completo < otra.__nombre_completo
+        return NotImplemented
+
+    def __gt__(self, otra):
+        """
+        Metodo que permite definir el criterio de menor igual para dos objetos
+        a partir de su nombre completo.
+        :param otra: La Persona con la que se va a realizar la comparacion
+        :return: True si la persona self es mayor que la otra persona, False en caso contrario
+        :rtype: bool
+        """
+        if isinstance(otra, Persona):
+            return self.__nombre_completo < otra.__nombre_completo
+        return NotImplemented
+

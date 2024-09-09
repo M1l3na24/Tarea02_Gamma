@@ -13,7 +13,7 @@ class Profesor(cP.Persona):
     """
 
     def __init__(self, nombre_completo: str, celular: int, fecha_cumpleanios: str, email: str, num_profesor: int,
-                 tel_oficina: int, sueldo: int, dept_ads: str, carrera: str, grupos: list):
+                 tel_oficina: int, sueldo: float, dept_ads: str, carrera: str, grupos: list):
         """
         Constructor para un Profesor, ademas de los datos de una Persona, recibe el numero de profesor,
         telefono de oficina, sueldo, departamento de adscripcion, carrera donde imparte materias,
