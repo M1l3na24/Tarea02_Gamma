@@ -10,9 +10,6 @@ import clasePersona as cP
 import claseAlumno as cA
 import claseProfesor as cPr
 import claseCoordinador as cC
-from claseAlumno import Alumno
-from claseProfesor import Profesor
-from claseCoordinador import Coordinador
 
 
 class Directorio:
@@ -203,12 +200,21 @@ class Directorio:
         :return: cadena: Str - La representacion de la persona en el directorio
         :rtype: Str
         """
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
         if not self.esta_vacio():
-            indice = self.buscar_indice(nombre)
-            if indice == -1:
-                print(f"No se encuentra el alumno con nombre {nombre}")
-            else:
-                print(self.__directorio[indice])
+            alumnos = ''
+            profesores = ''
+            coordinadores = ''
+            for i in range(self.__num_personas):
+                if self.__directorio[i].nombre_completo == nombre:
+                    if isinstance(self.__directorio[i], cA.Alumno):
+                        alumnos += str(self.__directorio[i]) + '\n'
+                    if isinstance(self.__directorio[i], cPr.Profesor):
+                        profesores += str(self.__directorio[i]) + '\n'
+                    if isinstance(self.__directorio[i], cC.Coordinador):
+                        coordinadores += str(self.__directorio[i]) + '\n'
+            print('\nALUMNOS:\n' + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
+            return
         print("No hay contactos.")
 
     # Extra: lectura/escritura de archivos CSV
@@ -362,24 +368,22 @@ class Directorio:
         :return un string con la informacion completa del contacto con esas caracteristicas.
         """
         self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
-        if not self.esta_vacio():
-            indice = self.buscar_indice(nombre)
-            if indice == -1:
-                print(f"No se encuentra el alumno con nombre {nombre}")
+        if rol == 'alumno' or rol == 'profesor' or rol == 'coordinador':
+            if rol == 'alumno':
+                rol = cA.Alumno
+            elif rol == 'profesor':
+                rol = cPr.Profesor
             else:
-                clases = {
-                    'Alumno': Alumno,
-                    'Profesor': Profesor,
-                    'Coordinador': Coordinador}
-
-                clase_rol = clases.get(rol, None)
-                if clase_rol is None:
-                    print(f"No se encontro la clase con nombre '{rol}'")
-                else:
-                    if isinstance(self.__directorio[indice], clase_rol):
-                        print(self.__directorio[indice])
-                    else:
-                        print("No se encontro un contacto con esas caracteristicas.")
+                rol = cC.Coordinador
+            aux = False
+            for i in range(self.__num_personas):
+                if self.__directorio[i].nombre_completo == nombre and isinstance(self.__directorio[i], rol):
+                    print(self.__directorio[i])
+                    aux = True
+            if not aux:
+                print('No existe un contacto con esas caracteristicas')
+        else:
+            print('No es una entrada valida')
 
     def eliminar_contacto(self, nombre):
         """
@@ -729,18 +733,17 @@ class Directorio:
         :return un string ordenado que divide profesores y coordinadores con ese sueldo especifico.
         """
         self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
-        if not self.esta_vacio():
-            profesores = ''
-            coordinadores = ''
-            for contacto in self.__directorio:
-                if not isinstance(contacto, cA.Alumno):
-                    if contacto is not None and contacto.sueldo == sueldo:
-                        if isinstance(contacto, cPr.Profesor):
-                            profesores += str(contacto) + '\n'
-                        if isinstance(contacto, cC.Coordinador):
-                            coordinadores += str(contacto) + '\n'
-            print("\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
-        print('No existe un contacto con esas caracteristicas')
+        profesores = ''
+        coordinadores = ''
+        for i in range(self.__num_personas):
+            if isinstance(self.__directorio[i], cPr.Profesor) or isinstance(self.__directorio[i], cC.Coordinador):
+                if self.__directorio[i].sueldo == sueldo:
+                    if isinstance(self.__directorio[i], cPr.Profesor):
+                        profesores += str(self.__directorio[i]) + '\n'
+                    if isinstance(self.__directorio[i], cC.Coordinador):
+                        coordinadores += str(self.__directorio[i]) + '\n'
+        print("\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
+        return
 
     # Issac
     def contiene(self, contacto) -> bool:
@@ -918,7 +921,8 @@ class Directorio:
             copia.eliminar_email(None)
             copia.eliminar_email('')
             print(copia)
-        print('No existe un contacto con esas caracteristicas')
+            return
+        print('El directorio aun no tiene contactos.')
 
     def mostrar_contactos_por_carrera(self, carrera_particular: str):
         """
@@ -934,14 +938,15 @@ class Directorio:
             profesores = ''
             coordinadores = ''
             for contacto in self.__directorio:
-                if isinstance(contacto, cA.Alumno) and contacto._Persona__carrera == carrera_particular:
+                if isinstance(contacto, cA.Alumno) and contacto.carrera == carrera_particular:
                     alumnos += str(contacto) + '\n'
-                elif isinstance(contacto, cPr.Profesor) and contacto._Persona__carrera == carrera_particular:
+                elif isinstance(contacto, cPr.Profesor) and contacto.carrera == carrera_particular:
                     profesores += str(contacto) + '\n'
-                elif isinstance(contacto, cC.Coordinador) and contacto._Persona__carrera_coordina == carrera_particular:
+                elif isinstance(contacto, cC.Coordinador) and contacto.carrera_coordina == carrera_particular:
                     coordinadores += str(contacto) + '\n'
 
-            return "\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
+            print("\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
+            return
         print('No existe un contacto con esas caracteristicas')
 
     def mostrar_alumnos_o_profesores(self, eleccion):
@@ -950,18 +955,32 @@ class Directorio:
         Esto segun la eleccion del usuario
         :param eleccion: 0 si alumnos, 1 si maestros
         """
-        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
+        self.ordenar_directorio(0, self.__num_personas - 1, self.nombre_comparador)
         if not self.esta_vacio():
-            alumnos = ''
-            profesores = ''
             if eleccion == 0:
-                for contacto in self.__directorio:
-                    if isinstance(contacto, cA.Alumno):
-                        alumnos += str(contacto) + '\n'
-                return "\nALUMNOS:\n" + alumnos
+                alumnos = []
+                for i in range(self.__num_personas):
+                    if isinstance(self.__directorio[i], cA.Alumno):
+                        alumnos.append(self.__directorio[i])
+                if alumnos:
+                    print('Alumnos registrados:')
+                    for alumno in alumnos:
+                        print(alumno)
+                else:
+                    print('No hay alumnos registrados\n')
+
             elif eleccion == 1:
-                for contacto in self.__directorio:
-                    if isinstance(contacto, cPr.Profesor):
-                        profesores += str(contacto) + '\n'
-                return "\nPROFESORES:\n" + profesores
-        print('No existe un contacto con esas caracteristicas')
+                profesores = []
+                for persona in self.__directorio:
+                    if isinstance(persona, cPr.Profesor):
+                        profesores.append(persona)
+                if profesores:
+                    print('Profesores registrados:')
+                    for profesor in profesores:
+                        print(profesor)
+                else:
+                    print('Np hay profesores registrados\n')
+            else:
+                print('No es una entrada valida')
+        print('Aun no hay contactos en el directorio')
+

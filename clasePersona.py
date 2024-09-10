@@ -117,7 +117,7 @@ class Persona:
         :return: La Persona en formato str
         :rtype: str
         """
-        return ("Persona:: {} | Celular: {} | "
+        return ("Persona: {} | Celular: {} | "
                 "Fecha cumpleanios: {} | Email: {}").format(self.__nombre_completo,
                                                             self.__celular,
                                                             self.__fecha_cumpleanios,
