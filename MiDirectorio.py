@@ -1,54 +1,3 @@
-# Programa: MiDirectorio.py
-# Autor: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
-# Fecha: 09/09/2024
-# Version: 1
-# Descripcion: Programa que prueba el funcionamiento de la clase Directorio
-
-import claseDirectorio as cDir
-
-
-def menu_principal() -> str:
-    """
-    Metodo auxiliar que muestra un menu con todas las operaciones implementadas en
-    el directorio escolar
-    :return: opcion: Str - La opcion deseada a realizar
-    :rtype: Str
-    """
-    while True:
-        opcionn = input('Que deseas hacer:\n'
-                        '1. Insertar datos de un nuevo contacto\n'
-                        '2. Mostrar información de un contacto\n'
-                        '3. Eliminar información de un contacto\n'
-                        '4. Actualizar los datos de un contacto \n'
-                        "5. Buscar contacto \n"
-                        'S. Guardar y Salir \n').upper()
-        if opcionn not in '1,2,3,4,5,S' or len(opcionn) != 1:
-            print('Opcion incorrecta')
-            continue
-        else:
-            break
-    return opcionn
-
-
-def menu_insertar_datos() -> str:
-    """
-    Metodo auxiliar que despliega las opciones que podemos realizar al insertar los datos de los contactos
-    :return: opcion: Str - La opcion deseada a realizar
-    :rtype: Str
-    """
-    while True:
-        opcionn = input('Que deseas hacer:\n'
-                        '1. Agregar Alumno\n'
-                        '2. Agregar Profesor\n'
-                        '3. Agregar Coordinador\n'
-                        'S. Salir \n').upper()
-        if opcionn not in '1,2,3,S' or len(opcionn) != 1:
-            print('Opcion incorrecta')
-            continue
-        else:
-            break
-    return opcionn
-
 def menu_buscar() -> str:
     """
     Metodo auxiliar que despliega las opciones que podemos realizar al buscar los contactos
@@ -66,7 +15,6 @@ def menu_buscar() -> str:
         else:
             break
     return opcionn
-
 
 def menu_actualizar():
     """
@@ -133,6 +81,58 @@ def menu_mostrar_info():
     return opcionn
 
 
+# Programa: MiDirectorio.py
+# Autor: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
+# Fecha: 09/09/2024
+# Version: 1
+# Descripcion: Programa que prueba el funcionamiento de la clase Directorio
+
+import claseDirectorio as cDir
+
+
+def menu_principal() -> str:
+    """
+    Metodo auxiliar que muestra un menu con todas las operaciones implementadas en
+    el directorio escolar
+    :return: opcion: Str - La opcion deseada a realizar
+    :rtype: Str
+    """
+    while True:
+        opcionn = input('Que deseas hacer:\n'
+                        '1. Insertar datos de un nuevo contacto\n'
+                        '2. Mostrar información de un contacto\n'
+                        '3. Eliminar información de un contacto\n'
+                        '4. Actualizar los datos de un contacto \n'
+                        "5. Buscar contacto \n"
+                        'S. Guardar y Salir \n').upper()
+        if opcionn not in '1,2,3,4,5,S' or len(opcionn) != 1:
+            print('Opcion incorrecta')
+            continue
+        else:
+            break
+    return opcionn
+
+
+def menu_insertar_datos() -> str:
+    """
+    Metodo auxiliar que despliega las opciones que podemos realizar al insertar los datos de los contactos
+    :return: opcion: Str - La opcion deseada a realizar
+    :rtype: Str
+    """
+    while True:
+        opcionn = input('Que deseas hacer:\n'
+                        '1. Agregar Alumno\n'
+                        '2. Agregar Profesor\n'
+                        '3. Agregar Coordinador\n'
+                        'S. Salir \n').upper()
+        if opcionn not in '1,2,3,S' or len(opcionn) != 1:
+            print('Opcion incorrecta')
+            continue
+        else:
+            break
+    return opcionn
+
+
 if __name__ == "__main__":
     print("Bienvenido al Directorio, donde se podra administrar los contactos de la escuela")
     directorio = cDir.Directorio()
@@ -150,7 +150,7 @@ if __name__ == "__main__":
             break
     match opcionn:
         case '1':
-            print('Leer un archivo csv creara un directorio nuevo con la capacidad necesaria que dependera del csv.')
+            print('Leer un archivo csv creara un directorio nuevo con la capacidad necesaria que dependera del csv.\nS. Salir')
             directorio.lectura_csvs()
             print(directorio)
             opcionn = ''
@@ -185,8 +185,7 @@ if __name__ == "__main__":
                                     sueldo = int(input("Escribe el sueldo del contacto que deseas buscar: "))
                                     directorio.mostrar_contactos_por_sueldo(sueldo)
                                 case "4":
-                                    email = input("Escribe el correo electrónico del contacto que deseas buscar: ")
-                                    directorio.mostrar_contactos_con_email(email)
+                                    directorio.mostrar_contactos_con_email()
                                 case '5':
                                     carrera = input("Escribe la carrera relacionada al contacto que deseas buscar: ")
                                     directorio.mostrar_contactos_por_carrera(carrera)
@@ -274,8 +273,7 @@ if __name__ == "__main__":
                                     sueldo = int(input("Escribe el sueldo del contacto que deseas buscar: "))
                                     directorio.mostrar_contactos_por_sueldo(sueldo)
                                 case "4":
-                                    email = input("Escribe el correo electrónico del contacto que deseas buscar: ")
-                                    directorio.mostrar_contactos_con_email(email)
+                                    directorio.mostrar_contactos_con_email()
                                 case '5':
                                     carrera = input("Escribe la carrera relacionada al contacto que deseas buscar: ")
                                     directorio.mostrar_contactos_por_carrera(carrera)

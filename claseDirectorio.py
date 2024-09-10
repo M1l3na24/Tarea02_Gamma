@@ -66,11 +66,15 @@ class Directorio:
                 break
             except ValueError:
                 print('El semestre del alumno, tiene que ser un entero')
-        self.extender(self.__num_personas + 1)
-        self.__directorio[self.__num_personas] = cA.Alumno(nombre, celular, cumpleanios, correo, num_cuenta, carrera,
-                                                           materias, semestre)
-        self.__num_personas += 1
-        print('Alumno agregado\n')
+
+        try:
+            self.__directorio[self.__num_personas] = cA.Alumno(nombre, celular, cumpleanios, correo, num_cuenta, carrera,
+                                                               materias, semestre)
+            self.extender(self.__num_personas + 1)
+            self.__num_personas += 1
+            print('Alumno agregado\n')
+        except ValueError:
+            print('No se puede registrar un email no valido, el Alumno no ha sido registrado\n')
 
     def insertar_nuevo_profesor(self):
         """
@@ -111,11 +115,17 @@ class Directorio:
                 break
             except ValueError:
                 print('El telefono de oficina del profesor, tiene que ser un entero')
-        self.extender(self.__num_personas + 1)
-        self.__directorio[self.__num_personas] = cPr.Profesor(nombre, celular, cumpleanios, correo, num_profesor,
-                                                              tel_oficina, sueldo, dept, carrera, grupos)
-        self.__num_personas += 1
-        print('Profesor agregado\n')
+
+        try:
+            self.__directorio[self.__num_personas] = cPr.Profesor(nombre, celular, cumpleanios, correo, num_profesor,
+                                                                  tel_oficina, sueldo, dept, carrera, grupos)
+            self.extender(self.__num_personas + 1)
+            self.__num_personas += 1
+            print('Profesor agregado\n')
+
+        except ValueError:
+            print('No se puede registrar un email no valido, el Profesor no ha sido registrado\n')
+
 
     def extender(self, nuevo_tamanio):
         """
@@ -137,7 +147,7 @@ class Directorio:
         """
         while True:
             try:
-                num_empleado = int(input('Escribe el numero de Empleado: '))
+                num_empleado = int(input('Escribe el numero de Coordinador: '))
                 if num_empleado not in self.__numeros_empleado:
                     self.__numeros_cuenta.add(num_empleado)
                     break
@@ -145,7 +155,7 @@ class Directorio:
                     print(f"El numero de empleado {num_empleado} ya existe, escribe otro")
                     continue
             except ValueError:
-                print('El numero de empleado, tiene que ser un entero')
+                print('El numero de empleado tiene que ser un entero')
         nombre = input('Escribe el nombre completo del Coordinador: ')
         # la fecha de cumpleanios debe ser dia/mes/anio
         cumpleanios = input('Escribe la fecha de cumpleanios del Coordinador (dia/mes/anio): ')
@@ -165,11 +175,14 @@ class Directorio:
                 break
             except ValueError:
                 print('El telefono de oficina del Coordinador, tiene que ser un entero')
-        self.extender(self.__num_personas + 1)
-        self.__directorio[self.__num_personas] = cC.Coordinador(nombre, celular, cumpleanios, correo, num_empleado,
-                                                                tel_oficina, sueldo, dept, carrera_coor)
-        self.__num_personas += 1
-        print('Coordinador agregado\n')
+        try:
+            self.__directorio[self.__num_personas] = cC.Coordinador(nombre, celular, cumpleanios, correo, num_empleado,
+                                                                    tel_oficina, sueldo, dept, carrera_coor)
+            self.extender(self.__num_personas + 1)
+            self.__num_personas += 1
+            print('Coordinador agregado\n')
+        except ValueError:
+            print('No se puede registrar un email no valido, el Coordinador no ha sido registrado\n')
 
     def buscar_indice(self, nombre_completo) -> int:
         """
@@ -182,7 +195,7 @@ class Directorio:
         for persona in self.__directorio:
             if persona is not None and persona.nombre_completo == nombre_completo:
                 return int(np.where(self.__directorio == persona)[0][0])
-        return -1
+        raise ValueError('No se encuentra en el arreglo de directorio')
 
     def esta_vacio(self) -> bool:
         """
@@ -200,33 +213,20 @@ class Directorio:
         :return: cadena: Str - La representacion de la persona en el directorio
         :rtype: Str
         """
-        if not self.esta_vacio():
-            posicion = self.buscar_indice(nombre)
-            if posicion != -1:
-                persona = self.__directorio[posicion]
-                if isinstance(persona, cA.Alumno):
-                    return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
-                            "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
-                            "\nNum. Cuenta:\n" + str(persona.num_cuenta) + "\nCarrera:\n" + persona.carrera +
-                            "\nMaterias:\n" + str(persona.materias) + "\nSemestre:\n" + str(persona.semestre))
-                elif isinstance(persona, cPr.Profesor):
-                    cPr.setlocale(cPr.LC_MONETARY, "en_US")
-                    return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
-                            "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
-                            "\nNum. Profesor:\n" + str(persona.num_profesor) + "\nTel. Oficina:\n" +
-                            str(persona.tel_oficina) + "\nSueldo:\n" + cPr.currency(persona.sueldo, grouping=True) +
-                            "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera donde imparte materias:\n" +
-                            persona.carrera + "\nGrupos:\n" + str(persona.grupos))
-
-                elif isinstance(persona, cC.Coordinador):
-                    cC.setlocale(cC.LC_MONETARY, "en_US")
-                    return ("\nNombre:\n" + persona.nombre_completo + "\nCelular:\n" + str(persona.celular) +
-                            "\nCumpleanios:\n" + persona.fecha_cumpleanios + "\nCorreo:\n" + persona.email +
-                            "\nNum. Empleado:\n" + str(persona.num_empleado) + "\nTel. Oficina:\n" +
-                            str(persona.tel_oficina) + "\nSueldo:\n" + cC.currency(persona.sueldo, grouping=True) +
-                            "\nDept. Ads.:\n" + persona.dept_ads + "\nCarrera que coordina:\n" + persona.carrera_coordina)
-        else:
-            return "No hay contactos."
+        self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
+        alumnos = ''
+        profesores = ''
+        coordinadores = ''
+        for i in range(self.__num_personas):
+            if self.__directorio[i].nombre_completo == nombre:
+                if isinstance(self.__directorio[i], cA.Alumno):
+                    alumnos += str(self.__directorio[i]) + '\n'
+                if isinstance(self.__directorio[i], cPr.Profesor):
+                    profesores += str(self.__directorio[i]) + '\n'
+                if isinstance(self.__directorio[i], cC.Coordinador):
+                    coordinadores += str(self.__directorio[i]) + '\n'
+        print('\nALUMNOS:\n' + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
+        return
 
     # Extra: lectura/escritura de archivos CSV
 
@@ -249,6 +249,8 @@ class Directorio:
         while True:
             nombre = input('Escribe el nombre del archivo con terminación csv'
                            ', que deseas abrir: ')
+            if nombre == 'S' or nombre == 's':
+                return
             try:
                 self.extender(self.tamanio_csv(nombre))
                 f = open(nombre, 'r')
@@ -379,10 +381,24 @@ class Directorio:
         :return un string con la informacion completa del contacto con esas caracteristicas.
         """
         self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
-        for contacto in self.__directorio:
-            if contacto.__nombre_completo == nombre and isinstance(contacto, rol):
-                return contacto
-        print('No existe un contacto con esas caracteristicas')
+        if rol == 'alumno' or rol == 'profesor' or rol == 'coordinador':
+            if rol == 'alumno':
+                rol = cA.Alumno
+            elif rol == 'profesor':
+                rol = cPr.Profesor
+            else:
+                rol = cC.Coordinador
+            aux = False
+            for i in range(self.__num_personas):
+                if self.__directorio[i].nombre_completo == nombre and isinstance(self.__directorio[i], rol):
+                    print(self.__directorio[i])
+                    aux = True
+            if not aux:
+                print('No existe un contacto con esas caracteristicas')
+        else:
+            print('No es una entrada validad')
+
+
 
     def eliminar_contacto(self, nombre):
         """
@@ -735,13 +751,15 @@ class Directorio:
         self.ordenar_directorio(0, self.__num_personas-1, self.nombre_comparador)
         profesores = ''
         coordinadores = ''
-        for contacto in self.__directorio:
-            if contacto is not None and contacto.sueldo == sueldo:
-                if isinstance(contacto, cPr.Profesor):
-                    profesores += str(contacto) + '\n'
-                if isinstance(contacto, cC.Coordinador):
-                    coordinadores += str(contacto) + '\n'
-        return "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
+        for i in range(self.__num_personas):
+            if isinstance(self.__directorio[i], cPr.Profesor) or isinstance(self.__directorio[i], cC.Coordinador):
+                if self.__directorio[i].sueldo == sueldo:
+                    if isinstance(self.__directorio[i], cPr.Profesor):
+                        profesores += str(self.__directorio[i]) + '\n'
+                    if isinstance(self.__directorio[i], cC.Coordinador):
+                        coordinadores += str(self.__directorio[i]) + '\n'
+        print("\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
+        return
 
     # Issac
     def contiene(self, contacto) -> bool:
@@ -948,7 +966,8 @@ class Directorio:
             elif isinstance(contacto, cC.Coordinador) and contacto.carrera_coordina == carrera_particular:
                 coordinadores += str(contacto) + '\n'
 
-        return "\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores
+        print("\nALUMNOS:\n" + alumnos + "\nPROFESORES:\n" + profesores + "\nCOORDINADORES:\n" + coordinadores)
+        return
 
     def mostrar_alumnos_o_profesores(self, eleccion):
         """
@@ -963,11 +982,11 @@ class Directorio:
                 if isinstance(self.__directorio[i], cA.Alumno):
                     alumnos.append(self.__directorio[i])
             if alumnos:
-                print('\nAlumnos registrados:')
+                print('Alumnos registrados:')
                 for alumno in alumnos:
                     print(alumno)
             else:
-                print('\nNo hay alumnos registrados')
+                print('No hay alumnos registrados\n')
 
         elif eleccion == 1:
             profesores = []
@@ -975,10 +994,10 @@ class Directorio:
                 if isinstance(persona, cPr.Profesor):
                     profesores.append(persona)
             if profesores:
-                print('\nProfesores registrados:')
+                print('Profesores registrados:')
                 for profesor in profesores:
                     print(profesor)
             else:
-                print('\nNp hay profesores registrados')
+                print('Np hay profesores registrados\n')
         else:
             print('No es una entrada valida')
