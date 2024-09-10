@@ -1,7 +1,7 @@
 # Programa: claseProfesor.py
 # Objetivo: Clase que modela un Profesor que hereda de Persona
 # Autores: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
-# Fecha: 31-08-2024
+# Version: 09-09-2024
 
 import clasePersona as cP
 from locale import currency, setlocale, LC_MONETARY
@@ -18,16 +18,16 @@ class Profesor(cP.Persona):
         Constructor para un Profesor, ademas de los datos de una Persona, recibe el numero de profesor,
         telefono de oficina, sueldo, departamento de adscripcion, carrera donde imparte materias,
         y grupos.
-        :param nombre_completo: El nombre completo del Profesor
-        :param celular: El celular del Profesor
-        :param fecha_cumpleanios: La fecha de cumpleanios del Profesor
-        :param email: EL correo electronico del Profesor
-        :param num_profesor: El numero de profesor
-        :param tel_oficina: El telefono del Profesor
-        :param sueldo: El sueldo del Profesor
-        :param dept_ads: El departamento del Profesor
-        :param carrera: La carrera donde imparte materias el Profesor
-        :param grupos: Los grupos del Profesor
+        :param nombre_completo:str - El nombre completo del Profesor
+        :param celular:int - El celular del Profesor
+        :param fecha_cumpleanios:str - La fecha de cumpleanios del Profesor
+        :param email:str - EL correo electronico del Profesor
+        :param num_profesor:int - El numero de profesor
+        :param tel_oficina:int - El telefono del Profesor
+        :param sueldo:float - El sueldo del Profesor
+        :param dept_ads:str - El departamento del Profesor
+        :param carrera:str - La carrera donde imparte materias el Profesor
+        :param grupos:list - Los grupos del Profesor
         """
         super().__init__(nombre_completo, celular, fecha_cumpleanios, email)
         self.__num_profesor = num_profesor
@@ -57,7 +57,7 @@ class Profesor(cP.Persona):
         return self.__tel_oficina
 
     @property
-    def sueldo(self) -> int:
+    def sueldo(self) -> float:
         """
         Metodo para obtener el sueldo del Profesor
         :return: El sueldo del profesor

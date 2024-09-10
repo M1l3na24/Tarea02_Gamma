@@ -1,7 +1,7 @@
 # Programa: claseAlumno.py
 # Objetivo: Clase que modela un Alumno que hereda de Persona
 # Autores: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
-# Fecha: 31-08-2024
+# Version: 09-09-2024
 
 import clasePersona as cP
 
@@ -15,14 +15,14 @@ class Alumno(cP.Persona):
         """
         Constructor para un Alumno, ademas de los datos de una Persona, recibe el numero de cuenta,
         su carrera, una lista de materias y el semestre al que esta inscrito.
-        :param nombre_completo: El nombre completo del Alumno
-        :param celular: El celular del Alumno
-        :param fecha_cumpleanios: La fecha de cumpleanios del Alumno
-        :param email: EL correo electronico del Alumno
-        :param num_cuenta: El numero de cuenta del Alumno
-        :param carrera: La carrera del Alumno
-        :param materias: La lista de materias del Alumno
-        :param semestre: El semestre al que esta inscrito el Alumno
+        :param nombre_completo:str - El nombre completo del Alumno
+        :param celular:int - El celular del Alumno
+        :param fecha_cumpleanios:str - La fecha de cumpleanios del Alumno
+        :param email:str - EL correo electronico del Alumno
+        :param num_cuenta:int - El numero de cuenta del Alumno
+        :param carrera:str - La carrera del Alumno
+        :param materias:list - La lista de materias del Alumno
+        :param semestre:int - El semestre al que esta inscrito el Alumno
         """
         super().__init__(nombre_completo, celular, fecha_cumpleanios, email)
         self.__num_cuenta = num_cuenta

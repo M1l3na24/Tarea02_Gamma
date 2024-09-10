@@ -182,11 +182,11 @@ if __name__ == "__main__":
                                     rol = input("Escribe el rol del contacto que deseas buscar: ")
                                     directorio.mostrar_informacion_contacto(nombre, rol)
                                 case '3':
-                                    sueldo = int(input("Escribe el sueldo del contacto que deseas buscar: "))
+                                    sueldo = float(input("Escribe el sueldo del contacto que deseas buscar: "))
                                     directorio.mostrar_contactos_por_sueldo(sueldo)
                                 case "4":
-                                    email = input("Escribe el correo electrónico del contacto que deseas buscar: ")
-                                    directorio.mostrar_contactos_con_email(email)
+                                    print("Se mostraran si hay, todos los contactos con email: ")
+                                    directorio.mostrar_contactos_con_email()
                                 case '5':
                                     carrera = input("Escribe la carrera relacionada al contacto que deseas buscar: ")
                                     directorio.mostrar_contactos_por_carrera(carrera)
@@ -271,11 +271,11 @@ if __name__ == "__main__":
                                     rol = input("Escribe el rol del contacto que deseas buscar: ")
                                     directorio.mostrar_informacion_contacto(nombre, rol)
                                 case '3':
-                                    sueldo = int(input("Escribe el sueldo del contacto que deseas buscar: "))
+                                    sueldo = float(input("Escribe el sueldo del contacto que deseas buscar: "))
                                     directorio.mostrar_contactos_por_sueldo(sueldo)
                                 case "4":
-                                    email = input("Escribe el correo electrónico del contacto que deseas buscar: ")
-                                    directorio.mostrar_contactos_con_email(email)
+                                    print("Se mostraran si hay, todos los contactos con email: ")
+                                    directorio.mostrar_contactos_con_email()
                                 case '5':
                                     carrera = input("Escribe la carrera relacionada al contacto que deseas buscar: ")
                                     directorio.mostrar_contactos_por_carrera(carrera)

@@ -1,7 +1,7 @@
 # Programa: clasePersona.py
 # Objetivo: Clase que modela una Persona
 # Autores: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
-# Fecha: 31-08-2024
+# Fecha: 09-09-2024
 
 from validate_email import validate_email
 
@@ -117,7 +117,7 @@ class Persona:
         :return: La Persona en formato str
         :rtype: str
         """
-        return ("Persona:: {} {} | Celular: {} | "
+        return ("Persona:: {} | Celular: {} | "
                 "Fecha cumpleanios: {} | Email: {}").format(self.__nombre_completo,
                                                             self.__celular,
                                                             self.__fecha_cumpleanios,
@@ -186,4 +186,3 @@ class Persona:
         if isinstance(otra, Persona):
             return self.__nombre_completo < otra.__nombre_completo
         return NotImplemented
-

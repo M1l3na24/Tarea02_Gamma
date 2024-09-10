@@ -1,7 +1,7 @@
 # Programa: claseCoordinador.py
 # Objetivo: Clase que modela un Coordinador que hereda de Persona
 # Autores: Milena Rivera, Carlos Barrera, Isaac Garrido, Mayela Rosas
-# Fecha: 31-08-2024
+# Version: 09-09-2024
 
 import clasePersona as cP
 from locale import currency, setlocale, LC_MONETARY
@@ -17,15 +17,15 @@ class Coordinador(cP.Persona):
         """
         Constructor para un Coordinador, ademas de los datos de una Persona, recibe el numero de empleado,
         telefono de oficina, sueldo, departamento de adscripcion y carrera que coordina.
-        :param nombre_completo: El nombre completo del Coordinador
-        :param celular: El celular del Coordinador
-        :param fecha_cumpleanios: La fecha de cumpleanios del Coordinador
-        :param email: EL correo electronico del PCoordinador
-        :param num_empleado: El numero empleado del Coordinador
-        :param tel_oficina: El telefono del Coordinador
-        :param sueldo: El sueldo del Coordinador
-        :param dept_ads: El departamento del Coordinador
-        :param carrera_coordina: La carrera que coordina el Coordinador
+        :param nombre_completo:str - El nombre completo del Coordinador
+        :param celular:int - El celular del Coordinador
+        :param fecha_cumpleanios:str - La fecha de cumpleanios del Coordinador
+        :param email:str - EL correo electronico del PCoordinador
+        :param num_empleado:int - El numero empleado del Coordinador
+        :param tel_oficina:int - El telefono del Coordinador
+        :param sueldo:float - El sueldo del Coordinador
+        :param dept_ads:str - El departamento del Coordinador
+        :param carrera_coordina:str - La carrera que coordina el Coordinador
         """
         super().__init__(nombre_completo, celular, fecha_cumpleanios, email)
         self.__num_empleado = num_empleado
@@ -55,7 +55,7 @@ class Coordinador(cP.Persona):
         return self.__tel_oficina
 
     @property
-    def sueldo(self) -> int:
+    def sueldo(self) -> float:
         """
         Metodo para obtener el sueldo del Coordinador
         :return: El sueldo del Coordinador
